@@ -3,21 +3,21 @@ import Footer from '../Components/Footer';
 import Header from '../Components/Header';
 import MyContext from '../MyContext/MyContext';
 
-function ExploreFoodsIngredients() {
+function FavoriteRecipes() {
   const { store: { setPageTitle, setShowSearchIcon } } = useContext(MyContext);
 
   useEffect(() => {
-    setPageTitle('Explore Ingredients');
+    setPageTitle('Favorite Recipes');
     setShowSearchIcon(false);
   }, []);
 
   return (
     <>
       <Header />
-      <h1>Página de ExploreFoodsIngredients</h1>
+      <h1>Página de FavoriteRecipes</h1>
       <Footer />
     </>
   );
 }
 
-export default ExploreFoodsIngredients;
+export default FavoriteRecipes;
