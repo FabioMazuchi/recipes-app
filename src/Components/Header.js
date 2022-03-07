@@ -14,17 +14,17 @@ function Header() {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    const TWELVE = 12;
-    const fetchFoodsOrDrinks = (pageTitle === 'Foods')
+    const fetchFoodsOrDrinks = (pageTitle.includes('Foods'))
       ? fetchFoodRecipe : fetchDrinkRecipe;
     const data = await fetchFoodsOrDrinks(searchType, searchValue);
-    if (data === undefined || null) {
-      global.alert('Sorry, we haven\'t found any recipes for these filters.');
-    }
-    if (data.length > TWELVE) {
-      data.length = TWELVE;
-    }
     setData(data);
+    if (data.length === 1) {
+      const foodOrDrinkRecipeRedirect = (
+        pageTitle.includes('Foods') ? `/foods/${data[0].idMeal}`
+          : `/drinks/${data[0].idDrink}`
+      );
+      history.push(`${foodOrDrinkRecipeRedirect}`);
+    }
   };
 
   const searchForm = (

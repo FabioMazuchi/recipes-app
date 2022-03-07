@@ -31,3 +31,12 @@ export const fetchDrinkRecipe = async (searchType, searchValue) => {
     break;
   }
 };
+
+// export const redirectToDetails = (data) => {
+//   const history = useHistory();
+//   if (Object.keys(data[0].includes('Meal'))) {
+//     return history.push(`/foods/${data[0].idMeal}`);
+//   } else {
+//     history.push(`/drinks/${data[0].idDrink}`);
+//   }
+// };

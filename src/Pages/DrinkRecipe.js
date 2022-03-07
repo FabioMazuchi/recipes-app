@@ -8,14 +8,14 @@ function DrinkRecipe() {
   const id = idd[idd.length - 1];
   const [recipe, setRecipe] = useState([]);
 
-  const getRecipes = async () => {
+  const teste = async () => {
     setRecipe(await fetchDrinkRecipeById(id));
   };
 
   console.log(recipe);
 
   useEffect(() => {
-    getRecipes();
+    teste();
   }, []);
 
   return (
