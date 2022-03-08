@@ -5,6 +5,7 @@ import { fetchFoodByIngredient,
   fetchDrinkByName,
   fetchDrinkByFirstLetter,
 } from '../Services';
+import NUMBER_6 from '../data';
 
 export const fetchFoodRecipe = async (searchType, searchValue) => {
   switch (searchType) {
@@ -30,4 +31,11 @@ export const fetchDrinkRecipe = async (searchType, searchValue) => {
   default:
     break;
   }
+};
+
+export const checkEmailSenha = (email, senha) => {
+  const valid = /\S+@\S+\.\S+/;
+  const check = valid.test(email);
+  if (check && senha.length > NUMBER_6) return true;
+  return false;
 };

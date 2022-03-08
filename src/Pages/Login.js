@@ -1,22 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import NUMBER_6 from '../data';
+import { checkEmailSenha } from '../Helpers';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [disabled, setDisabled] = useState(true);
   const history = useHistory();
-
-  const checkEmailSenha = () => {
-    const valid = /\S+@\S+\.\S+/;
-    const check = valid.test(email);
-    if (check && senha.length > NUMBER_6) {
-      setDisabled(false);
-    } else {
-      setDisabled(true);
-    }
-  };
 
   const setLocalStorage = () => {
     let key = 'mealsToken';
@@ -31,7 +21,12 @@ function Login() {
   };
 
   useEffect(() => {
-    checkEmailSenha();
+    const check = checkEmailSenha(email, senha);
+    if (check) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
   }, [email, senha]);
 
   return (
