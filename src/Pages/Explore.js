@@ -8,7 +8,7 @@ function Explore() {
 
   useEffect(() => {
     setPageTitle('Explore');
-    setShowSearchIcon(true);
+    setShowSearchIcon(false);
   }, []);
 
   return (

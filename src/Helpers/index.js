@@ -7,20 +7,16 @@ import { fetchFoodByIngredient,
 } from '../Services';
 import NUMBER_6 from '../data';
 
-export const fetchFoodRecipe = async (searchType, searchValue) => {
-  switch (searchType) {
-  case 'ingredient':
-    return fetchFoodByIngredient(searchValue);
-  case 'name':
-    return fetchFoodByName(searchValue);
-  case 'firstLetter':
-    return fetchFoodByFirstLetter(searchValue);
-  default:
-    break;
-  }
+export const fetchFoodRecipe = (searchType, searchValue) => {
+  const switchCaseModerno = {
+    ingredient: fetchFoodRecipe,
+    name: fetchFoodByName,
+    firstLetter: fetchFoodByFirstLetter,
+  };
+  return switchCaseModerno[searchType](searchValue);
 };
 
-export const fetchDrinkRecipe = async (searchType, searchValue) => {
+export const fetchDrinkRecipe = (searchType, searchValue) => {
   switch (searchType) {
   case 'ingredient':
     return fetchDrinkByIngredient(searchValue);
@@ -33,9 +29,20 @@ export const fetchDrinkRecipe = async (searchType, searchValue) => {
   }
 };
 
+
+// export const redirectToDetails = (data) => {
+//   const history = useHistory();
+//   if (Object.keys(data[0].includes('Meal'))) {
+//     return history.push(`/foods/${data[0].idMeal}`);
+//   } else {
+//     history.push(`/drinks/${data[0].idDrink}`);
+//   }
+// };
+
 export const checkEmailSenha = (email, senha) => {
   const valid = /\S+@\S+\.\S+/;
   const check = valid.test(email);
   if (check && senha.length > NUMBER_6) return true;
   return false;
 };
+
