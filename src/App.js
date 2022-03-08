@@ -16,6 +16,8 @@ import ExploreFoodsNationalities from './Pages/ExploreFoodsNationalities';
 import Profile from './Pages/Profile';
 import DoneRecipes from './Pages/DoneRecipes';
 import FavoriteRecipes from './Pages/FavoriteRecipes';
+import DrinksInProgress from './Pages/DrinksInProgress';
+import FoodsInProgress from './Pages/FoodsInProgress';
 
 function App() {
   return (
@@ -27,6 +29,7 @@ function App() {
           <Route exact path="/foods/:id" component={ FoodRecipe } />
           <Route exact path="/drinks" component={ Drinks } />
           <Route exact path="/drinks/:id" component={ DrinkRecipe } />
+          <Route exact path="/drinks/:id/in-progress" component={ DrinksInProgress } />
           <Route exact path="/explore" component={ Explore } />
           <Route exact path="/explore/foods" component={ ExploreFoods } />
           <Route
@@ -34,6 +37,7 @@ function App() {
             path="/explore/foods/ingredients"
             component={ ExploreFoodsIngredients }
           />
+          <Route exact path="/foods/:id/in-progress" component={ FoodsInProgress } />
           <Route
             exact
             path="/explore/foods/nationalities"
