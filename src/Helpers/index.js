@@ -6,20 +6,16 @@ import { fetchFoodByIngredient,
   fetchDrinkByFirstLetter,
 } from '../Services';
 
-export const fetchFoodRecipe = async (searchType, searchValue) => {
-  switch (searchType) {
-  case 'ingredient':
-    return fetchFoodByIngredient(searchValue);
-  case 'name':
-    return fetchFoodByName(searchValue);
-  case 'firstLetter':
-    return fetchFoodByFirstLetter(searchValue);
-  default:
-    break;
-  }
+export const fetchFoodRecipe = (searchType, searchValue) => {
+  const switchCaseModerno = {
+    ingredient: fetchFoodRecipe,
+    name: fetchFoodByName,
+    firstLetter: fetchFoodByFirstLetter,
+  };
+  return switchCaseModerno[searchType](searchValue);
 };
 
-export const fetchDrinkRecipe = async (searchType, searchValue) => {
+export const fetchDrinkRecipe = (searchType, searchValue) => {
   switch (searchType) {
   case 'ingredient':
     return fetchDrinkByIngredient(searchValue);

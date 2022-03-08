@@ -2,7 +2,9 @@ const TWELVE = 12;
 
 export const fetchFoodByIngredient = async (ingredient) => {
   const data = await (await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${ingredient}`)).json();
-  data.meals.length = 12;
+  if (data.meals.length > TWELVE) {
+    data.meals.length = TWELVE;
+  }
   return data.meals;
 };
 
@@ -20,12 +22,7 @@ export const fetchFoodByFirstLetter = async (firstLetter) => {
     return [];
   }
   const data = await (await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?f=${firstLetter}`)).json();
-  const result = data.meals.filter((meal) => meal.strMeal[0]
-  === firstLetter.toUpperCase());
-  if (result.length > TWELVE) {
-    result.length = TWELVE;
-  }
-  return result;
+  return data.meals;
 };
 
 export const fetchFoodRecipeById = async (id) => {
