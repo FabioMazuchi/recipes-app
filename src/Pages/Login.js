@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import NUMBER_6 from '../data';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [disabled, setDisabled] = useState(true);
+  const history = useHistory();
 
   const checkEmailSenha = () => {
     const valid = /\S+@\S+\.\S+/;
@@ -25,6 +27,7 @@ function Login() {
     console.log(objEmail);
     key = 'user';
     localStorage.setItem(key, JSON.stringify(objEmail));
+    history.push('/foods');
   };
 
   useEffect(() => {
