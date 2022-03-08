@@ -16,12 +16,15 @@ function Login() {
     }
   };
 
-  const logar = () => {
+  const setLocalStorage = () => {
     let key = 'mealsToken';
     localStorage.setItem(key, '1');
     key = 'cocktailsToken';
     localStorage.setItem(key, '1');
-    console.log('logado');
+    const objEmail = { email };
+    console.log(objEmail);
+    key = 'user';
+    localStorage.setItem(key, JSON.stringify(objEmail));
   };
 
   useEffect(() => {
@@ -45,7 +48,7 @@ function Login() {
         onChange={ ({ target }) => setSenha(target.value) }
       />
       <button
-        onClick={ logar }
+        onClick={ setLocalStorage }
         disabled={ disabled }
         data-testid="login-submit-btn"
         type="button"
