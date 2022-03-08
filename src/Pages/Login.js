@@ -16,6 +16,14 @@ function Login() {
     }
   };
 
+  const logar = () => {
+    let key = 'mealsToken';
+    localStorage.setItem(key, '1');
+    key = 'cocktailsToken';
+    localStorage.setItem(key, '1');
+    console.log('logado');
+  };
+
   useEffect(() => {
     checkEmailSenha();
   }, [email, senha]);
@@ -36,7 +44,12 @@ function Login() {
         placeholder="Senha..."
         onChange={ ({ target }) => setSenha(target.value) }
       />
-      <button disabled={ disabled } data-testid="login-submit-btn" type="button">
+      <button
+        onClick={ logar }
+        disabled={ disabled }
+        data-testid="login-submit-btn"
+        type="button"
+      >
         Enter
       </button>
     </form>
