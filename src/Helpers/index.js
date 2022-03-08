@@ -1,4 +1,4 @@
-import { fetchFoodByIngredient,
+import {
   fetchFoodByName,
   fetchFoodByFirstLetter,
   fetchDrinkByIngredient,
@@ -29,7 +29,6 @@ export const fetchDrinkRecipe = (searchType, searchValue) => {
   }
 };
 
-
 // export const redirectToDetails = (data) => {
 //   const history = useHistory();
 //   if (Object.keys(data[0].includes('Meal'))) {
@@ -45,4 +44,3 @@ export const checkEmailSenha = (email, senha) => {
   if (check && senha.length > NUMBER_6) return true;
   return false;
 };
-
