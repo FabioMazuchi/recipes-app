@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('67 - Implemente os elementos da tela de explorar respeitando os atributos descritos no protótipo', () => {
+describe.skip('67 - Implemente os elementos da tela de explorar respeitando os atributos descritos no protótipo', () => {
   it('Tem os data-testids explore-foods e explore-drinks', () => {
     cy.visit('http://localhost:3000/explore');
 
@@ -9,7 +9,7 @@ describe('67 - Implemente os elementos da tela de explorar respeitando os atribu
   });
 });
 
-describe('68 - Desenvolva a tela de maneira que tenha 2 botões: um para explorar comidas e o outro para explorar bebidas', () => {
+describe.skip('68 - Desenvolva a tela de maneira que tenha 2 botões: um para explorar comidas e o outro para explorar bebidas', () => {
   it('Os nomes dos botões devem ser "Explore Foods" e "Explore Drinks"', () => {
     cy.visit('http://localhost:3000/explore');
 
@@ -19,7 +19,7 @@ describe('68 - Desenvolva a tela de maneira que tenha 2 botões: um para explora
 });
 
 
-describe('69 - Redirecione a pessoa usuária ao clicar em um dos botões, a rota deve mudar para a página de explorar comidas ou de explorar bebidas', () => {
+describe.skip('69 - Redirecione a pessoa usuária ao clicar em um dos botões, a rota deve mudar para a página de explorar comidas ou de explorar bebidas', () => {
   it('O botão "Explore Foods" deve direcionar para a página de explorar comidas', () => {
     cy.visit('http://localhost:3000/explore');
 
