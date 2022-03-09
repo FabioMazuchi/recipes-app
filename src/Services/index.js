@@ -30,6 +30,20 @@ export const fetchFoodRecipeById = async (id) => {
   return data.meals;
 };
 
+export const fetchFoodCategories = async () => {
+  const data = await (await fetch('https://www.themealdb.com/api/json/v1/1/list.php?c=list')).json();
+  data.meals.length = 5;
+  return data.meals;
+};
+
+export const fetchFoodByCategory = async (category) => {
+  const data = await (await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`)).json();
+  if (data.meals.length > TWELVE) {
+    data.meals.length = TWELVE;
+  }
+  return data.meals;
+};
+
 export const fetchDrinkByIngredient = async (ingredient) => {
   const data = await (await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${ingredient}`)).json();
   if (data.drinks.length > TWELVE) {
@@ -62,5 +76,19 @@ export const fetchDrinkByFirstLetter = async (firstLetter) => {
 
 export const fetchDrinkRecipeById = async (id) => {
   const data = await (await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`)).json();
+  return data.drinks;
+};
+
+export const fetchDrinkCategories = async () => {
+  const data = await (await fetch('https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list')).json();
+  data.drinks.length = 5;
+  return data.drinks;
+};
+
+export const fetchDrinkByCategory = async (category) => {
+  const data = await (await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`)).json();
+  if (data.drinks.length > TWELVE) {
+    data.drinks.length = TWELVE;
+  }
   return data.drinks;
 };

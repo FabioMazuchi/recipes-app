@@ -7,9 +7,9 @@ import {
 } from '../Services';
 import NUMBER_6 from '../data';
 
-export const fetchFoodRecipe = (searchType, searchValue) => {
+export const fetchFoodRecipe = async (searchType, searchValue) => {
   const switchCaseModerno = {
-    ingredient: fetchFoodRecipe,
+    ingredient: fetchFoodByIngredient,
     name: fetchFoodByName,
     firstLetter: fetchFoodByFirstLetter,
   };
