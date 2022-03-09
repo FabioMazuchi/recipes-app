@@ -1,4 +1,5 @@
 import React, { useEffect, useContext } from 'react';
+import { Link } from 'react-router-dom';
 import Footer from '../Components/Footer';
 import Header from '../Components/Header';
 import MyContext from '../MyContext/MyContext';
@@ -14,7 +15,10 @@ function Explore() {
   return (
     <>
       <Header />
-      <h1>Página de Explore</h1>
+      <section>
+        <Link to="/explore/foods" data-testid="explore-foods">Explore Foods</Link>
+        <Link to="/explore/drinks" data-testid="explore-drinks">Explore Drinks</Link>
+      </section>
       <Footer />
     </>
   );
