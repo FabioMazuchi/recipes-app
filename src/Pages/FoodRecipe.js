@@ -115,7 +115,7 @@ function FoodRecipe() {
                 </div>
               ))}
             </Carousel>
-            <button type="button" data-testid="start-recipe-btn">
+            <button className="startRecipe" type="button" data-testid="start-recipe-btn">
               Iniciar Receita
             </button>
           </div>
