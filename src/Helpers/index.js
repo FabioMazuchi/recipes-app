@@ -1,4 +1,5 @@
 import {
+  fetchFoodByIngredient,
   fetchFoodByName,
   fetchFoodByFirstLetter,
   fetchDrinkByIngredient,
