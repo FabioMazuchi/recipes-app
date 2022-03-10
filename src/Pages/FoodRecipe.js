@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
 import { fetchFoodRecipeById, getIngredients } from '../Services';
 
 function FoodRecipe() {
@@ -31,6 +33,26 @@ function FoodRecipe() {
     const res = getIngredients(response);
     setIngredients(res);
     getIdVideo(response);
+  };
+
+  const responsive = {
+    superLargeDesktop: {
+      // the naming can be any, depends on you.
+      breakpoint: { max: 4000, min: 3000 },
+      items: 5,
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 3,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2,
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 2,
+    },
   };
 
   useEffect(() => {
@@ -81,18 +103,18 @@ function FoodRecipe() {
               frameBorder="0"
               allowFullScreen
             />
-            <section>
+            <Carousel responsive={ responsive }>
               {recipeDrinks.map(({ idDrink, strDrink, strDrinkThumb }, i) => (
-                <Link
-                  to={ `/drinks/${idDrink}` }
+                <div
                   key={ i }
                   data-testid={ `${i}-recomendation-card` }
                 >
                   <img data-testid="recipe-photo" src={ strDrinkThumb } alt="oi" />
-                  <h2 data-testid="recipe-title">{strDrink}</h2>
-                </Link>
+                  <h2 data-testid={ `${i}-recomendation-title` }>{strDrink}</h2>
+                  <Link to={ `/drinks/${idDrink}` }>Detalhes</Link>
+                </div>
               ))}
-            </section>
+            </Carousel>
             <button type="button" data-testid="start-recipe-btn">
               Iniciar Receita
             </button>
