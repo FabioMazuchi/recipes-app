@@ -11,6 +11,12 @@ function DrinkRecipe() {
   const [recipe, setRecipe] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [recipeFoods, setRecipeFoods] = useState([]);
+  const [initRecipe, setInitRecipe] = useState(false);
+
+  const iniciarReceita = (idDrink) => {
+    setInitRecipe(true);
+    history.push(`/drinks/${idDrink}/in-progress`);
+  };
 
   const fetchInitFoods = async () => {
     const result = await (await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=')).json();
@@ -92,8 +98,13 @@ function DrinkRecipe() {
                 </div>
               ))}
             </Carousel>
-            <button className="startRecipe" type="button" data-testid="start-recipe-btn">
-              Iniciar Receita
+            <button
+              onClick={ () => iniciarReceita(idDrink) }
+              className="startRecipe"
+              type="button"
+              data-testid="start-recipe-btn"
+            >
+              {initRecipe ? 'Iniciar Receita' : 'Continue Recipe'}
             </button>
           </div>
         ),

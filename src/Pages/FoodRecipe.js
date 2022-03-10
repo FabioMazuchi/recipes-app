@@ -12,6 +12,12 @@ function FoodRecipe() {
   const [ingredients, setIngredients] = useState([]);
   const [embedYoutube, setEmbedYoutube] = useState('');
   const [recipeDrinks, setRecipeDrinks] = useState([]);
+  const [initRecipe, setInitRecipe] = useState(false);
+
+  const iniciarReceita = (idMeal) => {
+    setInitRecipe(true);
+    history.push(`/foods/${idMeal}/in-progress`);
+  };
 
   const fetchInitDrinks = async () => {
     const result = await (await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=')).json();
@@ -115,8 +121,13 @@ function FoodRecipe() {
                 </div>
               ))}
             </Carousel>
-            <button className="startRecipe" type="button" data-testid="start-recipe-btn">
-              Iniciar Receita
+            <button
+              onClick={ () => iniciarReceita(idMeal) }
+              className="startRecipe"
+              type="button"
+              data-testid="start-recipe-btn"
+            >
+              {initRecipe ? 'Iniciar Receita' : 'Continue Recipe'}
             </button>
           </div>
         ),
