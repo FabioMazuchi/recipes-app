@@ -92,3 +92,21 @@ export const fetchDrinkByCategory = async (category) => {
   }
   return data.drinks;
 };
+
+export const getIngredients = (array) => {
+  const keys = Object.entries(array[0]);
+  const arrayIngred = keys
+    .filter((k) => k[0].includes('Ingredient') && k[1] !== '' && k[1] !== null);
+  const arrayMeasure = keys
+    .filter((k) => k[0].includes('strMeasure') && k[1] !== '' && k[1] !== null);
+  const ingred = arrayIngred.map((ingr) => ingr[1]);
+  const measure = arrayMeasure.map((measur) => measur[1]);
+  const finalResult = ingred.reduce(((acc, ingr, i) => {
+    const obj = { ingredient: '', measure: '' };
+    obj.ingredient = ingr;
+    obj.measure = measure[i];
+    acc.push(obj);
+    return acc;
+  }), []);
+  return finalResult;
+};

@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-// import React, { useContext } from 'react';
 import { fetchFoodCategories, fetchFoodByCategory } from '../Services';
 import Card from '../Components/Card';
 import Footer from '../Components/Footer';
