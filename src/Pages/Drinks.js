@@ -4,11 +4,13 @@ import Footer from '../Components/Footer';
 import Header from '../Components/Header';
 import Card from '../Components/Card';
 import MyContext from '../MyContext/MyContext';
+import CategoryListButton from '../Components/CategoryListButton';
 
 function Drinks() {
   const { store: { data,
     setShowSearchIcon, setData, setPageTitle } } = useContext(MyContext);
   const [drinkCategories, setDrinkCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('');
 
   const fetchInitDrinks = async () => {
     const result = await (await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=')).json();
@@ -16,6 +18,20 @@ function Drinks() {
     const resultCategories = await fetchDrinkCategories();
     setDrinkCategories(resultCategories);
     setData(result.drinks);
+  };
+
+  const handleSelect = async (strCategory) => {
+    setSelectedCategory(strCategory);
+    const validate = (
+      selectedCategory === strCategory
+    );
+    if (validate) {
+      fetchInitDrinks();
+      setSelectedCategory('');
+    } else {
+      const result = await fetchDrinkByCategory(strCategory);
+      setData(result);
+    }
   };
 
   useEffect(() => {
@@ -28,17 +44,11 @@ function Drinks() {
     <>
       <Header />
       {drinkCategories.map(({ strCategory }, index) => (
-        <button
+        <CategoryListButton
           key={ index }
-          type="button"
-          data-testid={ `${strCategory}-category-filter` }
-          onClick={ async () => {
-            const result = await fetchDrinkByCategory(strCategory);
-            setData(result);
-          } }
-        >
-          {strCategory}
-        </button>
+          strCategory={ strCategory }
+          onClick={ () => handleSelect(strCategory) }
+        />
       ))}
       <main>
         <h3>Drinks:</h3>
