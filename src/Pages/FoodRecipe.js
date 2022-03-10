@@ -9,6 +9,14 @@ function FoodRecipe() {
   const [recipe, setRecipe] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [embedYoutube, setEmbedYoutube] = useState('');
+  const [recipeDrinks, setRecipeDrinks] = useState([]);
+
+  const fetchInitDrinks = async () => {
+    const result = await (await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=')).json();
+    result.drinks.length = 6;
+    setRecipeDrinks(result.drinks);
+    console.log(recipeDrinks);
+  };
 
   const getIdVideo = (array) => {
     const { strYoutube } = array[0];
@@ -23,11 +31,11 @@ function FoodRecipe() {
     const res = getIngredients(response);
     setIngredients(res);
     getIdVideo(response);
-    console.log(ingredients);
   };
 
   useEffect(() => {
     getRecipes();
+    fetchInitDrinks();
   }, []);
 
   return (
@@ -73,7 +81,18 @@ function FoodRecipe() {
               frameBorder="0"
               allowFullScreen
             />
-            <div data-testid="0-recomendation-card">Recomendado</div>
+            <section>
+              {recipeDrinks.map(({ idDrink, strDrink, strDrinkThumb }, i) => (
+                <Link
+                  to={ `/drinks/${idDrink}` }
+                  key={ i }
+                  data-testid={ `${i}-recomendation-card` }
+                >
+                  <img data-testid="recipe-photo" src={ strDrinkThumb } alt="oi" />
+                  <h2 data-testid="recipe-title">{strDrink}</h2>
+                </Link>
+              ))}
+            </section>
             <button type="button" data-testid="start-recipe-btn">
               Iniciar Receita
             </button>

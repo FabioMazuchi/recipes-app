@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { fetchDrinkRecipeById, getIngredients } from '../Services';
 
 function DrinkRecipe() {
@@ -8,21 +8,22 @@ function DrinkRecipe() {
   const id = idd[idd.length - 1];
   const [recipe, setRecipe] = useState([]);
   const [ingredients, setIngredients] = useState([]);
+  const [recipeFoods, setRecipeFoods] = useState([]);
 
-  // const getIngredients = (array) => {
-  //   const keys = Object.entries(array[0]);
-  //   const arrayIngred = keys
-  //     .filter((k) => k[0].includes('Ingredient') && k[1] !== '');
-  //   const ingred = arrayIngred.map((ingr) => ingr[1]);
-  //   setIngredients(ingred);
-  //   console.log(ingredients);
-  // };
+  const fetchInitFoods = async () => {
+    const result = await (await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=')).json();
+    result.meals.length = 6;
+    console.log(result.meals);
+    setRecipeFoods(result.meals);
+    console.log(recipeFoods);
+  };
 
   const teste = async () => {
     const response = await fetchDrinkRecipeById(id);
     setRecipe(response);
     const res = getIngredients(response);
     setIngredients(res);
+    fetchInitFoods();
   };
 
   useEffect(() => {
@@ -57,7 +58,18 @@ function DrinkRecipe() {
             ))}
             <h3>Modo de preparo:</h3>
             <p data-testid="instructions">{strInstructions}</p>
-            <div data-testid="0-recomendation-card">Recomendado</div>
+            <section>
+              {recipeFoods.map(({ idMeal, strMeal, strMealThumb }, i) => (
+                <Link
+                  to={ `/foods/${idMeal}` }
+                  key={ i }
+                  data-testid={ `${i}-recomendation-card` }
+                >
+                  <img data-testid="recipe-photo" src={ strMealThumb } alt="oi" />
+                  <h2 data-testid="recipe-title">{strMeal}</h2>
+                </Link>
+              ))}
+            </section>
             <button type="button" data-testid="start-recipe-btn">
               Iniciar Receita
             </button>
