@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
-import { fetchFoodRecipeById } from '../Services';
+import { fetchFoodRecipeById, getIngredients } from '../Services';
 
 function FoodRecipe() {
   const history = useHistory();
@@ -8,20 +8,22 @@ function FoodRecipe() {
   const id = idd[idd.length - 1];
   const [recipe, setRecipe] = useState([]);
   const [ingredients, setIngredients] = useState([]);
+  const [embedYoutube, setEmbedYoutube] = useState('');
 
-  const getIngredients = (array) => {
-    const keys = Object.entries(array[0]);
-    const arrayIngred = keys
-      .filter((k) => k[0].includes('Ingredient') && k[1] !== '');
-    const ingred = arrayIngred.map((ingr) => ingr[1]);
-    setIngredients(ingred);
-    console.log(ingredients);
+  const getIdVideo = (array) => {
+    const { strYoutube } = array[0];
+    const IdYoutube = strYoutube.split('=')[1];
+    const result = `https://www.youtube.com/embed/${IdYoutube}`;
+    setEmbedYoutube(result);
   };
 
   const getRecipes = async () => {
     const response = await fetchFoodRecipeById(id);
     setRecipe(response);
-    getIngredients(response);
+    const res = getIngredients(response);
+    setIngredients(res);
+    getIdVideo(response);
+    console.log(ingredients);
   };
 
   useEffect(() => {
@@ -49,9 +51,13 @@ function FoodRecipe() {
             <h3 data-testid="recipe-category">{strCategory}</h3>
             <h2 data-testid="recipe-title">{strMeal}</h2>
             <img data-testid="recipe-photo" src={ strMealThumb } alt="oi" />
-            {ingredients.map((ingredient, i) => (
-              <p data-testid={ `${i}-ingredient-name-and-measure` } key={ i }>
-                {ingredient}
+            <h2>Ingredientes:</h2>
+            {ingredients.map(({ ingredient, measure }, i) => (
+              <p
+                data-testid={ `${i}-ingredient-name-and-measure` }
+                key={ i }
+              >
+                { `${ingredient} - ${measure}` }
               </p>
             ))}
             <h3>Modo de preparo:</h3>
@@ -59,6 +65,14 @@ function FoodRecipe() {
             <Link data-testid="video" target="_blank" to={ strYoutube }>
               Video
             </Link>
+            <iframe
+              width="560"
+              height="315"
+              src={ embedYoutube }
+              title="YouTube video player"
+              frameBorder="0"
+              allowFullScreen
+            />
             <div data-testid="0-recomendation-card">Recomendado</div>
             <button type="button" data-testid="start-recipe-btn">
               Iniciar Receita

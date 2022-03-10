@@ -14,7 +14,6 @@ function Login() {
     key = 'cocktailsToken';
     localStorage.setItem(key, '1');
     const objEmail = { email };
-    console.log(objEmail);
     key = 'user';
     localStorage.setItem(key, JSON.stringify(objEmail));
     history.push('/foods');
