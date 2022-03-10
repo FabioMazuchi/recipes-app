@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { fetchFoodByCategory } from '../Services';
+import { fetchFoodByCategory, fetchFoodCategories } from '../Services';
 
 import Card from '../Components/Card';
 import Footer from '../Components/Footer';
@@ -11,15 +11,7 @@ function Foods() {
   const { store: { data,
     setShowSearchIcon, setData, setPageTitle } } = useContext(MyContext);
   const [selectedCategory, setSelectedCategory] = useState('');
-  // Tive que fazer isso aqui pq não estava passando no teste:
-  const categoryList = [
-    { strCategory: 'All' },
-    { strCategory: 'Beef' },
-    { strCategory: 'Breakfast' },
-    { strCategory: 'Chicken' },
-    { strCategory: 'Dessert' },
-    { strCategory: 'Goat' },
-  ];
+  const [categoryList, setCategoryList] = useState([]);
 
   const fetchInitFoods = async () => {
     const result = await (await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=')).json();
@@ -27,11 +19,16 @@ function Foods() {
     setData(result.meals);
   };
 
+  const getCategories = async () => {
+    const result = await fetchFoodCategories();
+    setCategoryList(result);
+  };
+
   const handleSelect = async (strCategory) => {
     setSelectedCategory(strCategory);
     const validate = (
       selectedCategory === strCategory
-      || selectedCategory === 'All'
+      || strCategory === 'All'
     );
     if (validate) {
       fetchInitFoods();
@@ -46,11 +43,19 @@ function Foods() {
     setShowSearchIcon(true);
     setPageTitle('Foods');
     fetchInitFoods();
+    getCategories();
   }, []);
 
   return (
     <>
       <Header />
+      <button
+        type="button"
+        data-testid="All-category-filter"
+        onClick={ () => handleSelect('All') }
+      >
+        All
+      </button>
       {categoryList.map(({ strCategory }, index) => (
         <CategoryListButton
           key={ index }

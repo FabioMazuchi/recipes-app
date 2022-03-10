@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { fetchDrinkByCategory, fetchDrinkCategories } from '../Services';
-// import { fetchDrinkByCategory } from '../Services';
-
 import Footer from '../Components/Footer';
 import Header from '../Components/Header';
 import Card from '../Components/Card';
@@ -11,31 +9,25 @@ import CategoryListButton from '../Components/CategoryListButton';
 function Drinks() {
   const { store: { data,
     setShowSearchIcon, setData, setPageTitle } } = useContext(MyContext);
-  const [drinkCategories, setDrinkCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
-  // const drinkCategories = [
-  //   { strCategory: 'All' },
-  //   { strCategory: 'Ordinary Drink' },
-  //   { strCategory: 'Cocktail' },
-  //   { strCategory: 'Shake' },
-  //   { strCategory: 'Other/Unknown' },
-  //   { strCategory: 'Cocoa' },
-  // ];
+  const [drinkCategories, setDrinkCategories] = useState([]);
 
   const fetchInitDrinks = async () => {
     const result = await (await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=')).json();
     result.drinks.length = 12;
-    const resultCategories = await fetchDrinkCategories();
-    // resultCategories.unshift({ strCategory: 'All' });
-    setDrinkCategories(resultCategories);
     setData(result.drinks);
   };
 
+  const fetchDrinksCategories = async () => {
+    const resultCategories = await fetchDrinkCategories();
+    setDrinkCategories(resultCategories);
+  };
+
   const handleSelect = async (strCategory) => {
-    console.log(strCategory);
     setSelectedCategory(strCategory);
     const validate = (
       selectedCategory === strCategory
+      || strCategory === 'All'
     );
     if (validate) {
       fetchInitDrinks();
@@ -50,11 +42,20 @@ function Drinks() {
     setShowSearchIcon(true);
     setPageTitle('Drinks');
     fetchInitDrinks();
+    fetchDrinksCategories();
   }, []);
 
   return (
     <>
       <Header />
+      <button
+        type="button"
+        data-testid="All-category-filter"
+        onClick={ () => handleSelect('All') }
+      >
+        All
+
+      </button>
       {drinkCategories.map(({ strCategory }, index) => (
         <CategoryListButton
           key={ index }
