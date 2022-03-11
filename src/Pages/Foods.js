@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { fetchFoodByCategory, fetchFoodCategories } from '../Services';
+import { fetchFoods } from '../Services';
+import { MAX_LENGTH } from '../data';
 import Card from '../Components/Card';
 import Footer from '../Components/Footer';
 import Header from '../Components/Header';
@@ -11,16 +12,16 @@ function Foods() {
     setShowSearchIcon, setData, setPageTitle } } = useContext(MyContext);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [categoryList, setCategoryList] = useState([]);
+  const FIVE = 5;
 
   const fetchInitFoods = async () => {
-    const result = await (await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=')).json();
-    result.meals.length = 12;
-    setData(result.meals);
+    const result = await (await fetchFoods('search.php?s='));
+    setData(result.slice(0, MAX_LENGTH));
   };
 
   const getCategories = async () => {
-    const result = await fetchFoodCategories();
-    setCategoryList(result);
+    const result = await fetchFoods('list.php?c=list');
+    setCategoryList(result.slice(0, FIVE));
   };
 
   const handleSelect = async (strCategory) => {
@@ -33,7 +34,7 @@ function Foods() {
       fetchInitFoods();
       setSelectedCategory('');
     } else {
-      const result = await fetchFoodByCategory(strCategory);
+      const result = await fetchFoods(`filter.php?c=${strCategory}`);
       setData(result);
     }
   };
