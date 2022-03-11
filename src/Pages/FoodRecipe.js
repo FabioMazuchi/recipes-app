@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useHistory, Link, useLocation } from 'react-router-dom';
 import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
-import { fetchFoodRecipeById, getIngredients, saveFoodFavStorage } from '../Services';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
-// import MyContext from '../MyContext/MyContext';
+import 'react-multi-carousel/lib/styles.css';
+import { fetchFoods, getIngredients } from '../Services';
+import MyContext from '../MyContext/MyContext';
 
 function FoodRecipe() {
-  // const { store: {
-  //   favoritedArray,
-  //   setFavoritedArray } } = useContext(MyContext);
+  const { store: {
+    favoritedArray,
+    setFavoritedArray } } = useContext(MyContext);
   const history = useHistory();
-  const { pathname } = useLocation();
-  const idd = pathname.split('/');
+  const idd = history.location.pathname.split('/');
   const id = idd[idd.length - 1];
   const [recipe, setRecipe] = useState([]);
+  const { pathname } = useLocation();
   const [ingredients, setIngredients] = useState([]);
   const [embedYoutube, setEmbedYoutube] = useState('');
   const [recipeDrinks, setRecipeDrinks] = useState([]);
@@ -57,21 +57,21 @@ function FoodRecipe() {
   };
 
   const getRecipes = async () => {
-    const response = await fetchFoodRecipeById(id);
+    const response = await fetchFoods(`lookup.php?i=${id}`);
     setRecipe(response);
     const res = getIngredients(response);
     setIngredients(res);
     getIdVideo(response);
   };
 
-  // const handleFavorite = (param, obj) => {
-  //   setFavoritedArray([...favoritedArray, param]);
-  //   if (isFavorited) {
-  //     setFavoritedArray(favoritedArray.filter((f) => f !== param));
-  //   }
-  //   setIsFavorited(!isFavorited);
-  //   saveFoodFavStorage(obj);
-  // };
+  const handleFavorite = (param, obj) => {
+    setFavoritedArray([...favoritedArray, param]);
+    if (isFavorited) {
+      setFavoritedArray(favoritedArray.filter((f) => f !== param));
+    }
+    setIsFavorited(!isFavorited);
+    saveFoodFavStorage(obj);
+  };
 
   const responsive = {
     superLargeDesktop: {
@@ -97,8 +97,7 @@ function FoodRecipe() {
     getRecipes();
     fetchInitDrinks();
     // setIsFavorited(favoritedArray.includes(id));
-    getFavStorage();
-  }, [isFavorited]);
+  }, []);
 
   useEffect(() => {
     getFavStorage();
@@ -135,7 +134,7 @@ function FoodRecipe() {
               type="image"
               src={ isFavorited ? blackHeartIcon : whiteHeartIcon }
               alt="favoriteRecipe"
-              onClick={ () => saveFoodFavStorage(recipe) }
+              onClick={ () => handleFavorite(id) }
             />
             <h3 data-testid="recipe-category">{strCategory}</h3>
             <h2 data-testid="recipe-title">{strMeal}</h2>

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useHistory, Link, useLocation } from 'react-router-dom';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import { fetchDrinkRecipeById, getIngredients } from '../Services';
+import { fetchDrinks, getIngredients } from '../Services';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import MyContext from '../MyContext/MyContext';
@@ -36,7 +36,7 @@ function DrinkRecipe() {
   };
 
   const teste = async () => {
-    const response = await fetchDrinkRecipeById(id);
+    const response = await fetchDrinks(`lookup.php?i=${id}`);
     setRecipe(response);
     const res = getIngredients(response);
     setIngredients(res);
