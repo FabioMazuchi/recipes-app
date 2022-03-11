@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { fetchDrinkByCategory, fetchDrinkCategories } from '../Services';
+import { fetchDrinks } from '../Services';
+import { MAX_LENGTH } from '../data';
 import Footer from '../Components/Footer';
 import Header from '../Components/Header';
 import Card from '../Components/Card';
@@ -11,16 +12,16 @@ function Drinks() {
     setShowSearchIcon, setData, setPageTitle } } = useContext(MyContext);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [drinkCategories, setDrinkCategories] = useState([]);
+  const FIVE = 5;
 
   const fetchInitDrinks = async () => {
-    const result = await (await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=')).json();
-    result.drinks.length = 12;
-    setData(result.drinks);
+    const result = await (await fetchDrinks('search.php?s='));
+    setData(result.slice(0, MAX_LENGTH));
   };
 
   const fetchDrinksCategories = async () => {
-    const resultCategories = await fetchDrinkCategories();
-    setDrinkCategories(resultCategories);
+    const resultCategories = await fetchDrinks('list.php?c=list');
+    setDrinkCategories(resultCategories.slice(0, FIVE));
   };
 
   const handleSelect = async (strCategory) => {
@@ -33,7 +34,7 @@ function Drinks() {
       fetchInitDrinks();
       setSelectedCategory('');
     } else {
-      const result = await fetchDrinkByCategory(strCategory);
+      const result = await fetchDrinks(`filter.php?c=${strCategory}`);
       setData(result);
     }
   };

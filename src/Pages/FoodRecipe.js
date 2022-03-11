@@ -1,27 +1,18 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { useHistory, Link, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useHistory, Link } from 'react-router-dom';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import { fetchFoodRecipeById, getIngredients } from '../Services';
-import whiteHeartIcon from '../images/whiteHeartIcon.svg';
-import blackHeartIcon from '../images/blackHeartIcon.svg';
-import MyContext from '../MyContext/MyContext';
+import { fetchFoods, getIngredients } from '../Services';
 
 function FoodRecipe() {
-  const { store: {
-    favoritedArray,
-    setFavoritedArray } } = useContext(MyContext);
   const history = useHistory();
-  const { pathname } = useLocation();
-  const idd = pathname.split('/');
+  const idd = history.location.pathname.split('/');
   const id = idd[idd.length - 1];
   const [recipe, setRecipe] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [embedYoutube, setEmbedYoutube] = useState('');
   const [recipeDrinks, setRecipeDrinks] = useState([]);
   const [initRecipe, setInitRecipe] = useState(false);
-  const [showLinkCopied, setShowLinkCopied] = useState(false);
-  const [isFavorited, setIsFavorited] = useState(false);
 
   const iniciarReceita = (idMeal) => {
     setInitRecipe(true);
@@ -42,19 +33,11 @@ function FoodRecipe() {
   };
 
   const getRecipes = async () => {
-    const response = await fetchFoodRecipeById(id);
+    const response = await fetchFoods(`lookup.php?i=${id}`);
     setRecipe(response);
     const res = getIngredients(response);
     setIngredients(res);
     getIdVideo(response);
-  };
-
-  const handleFavorite = (param) => {
-    setFavoritedArray([...favoritedArray, param]);
-    if (isFavorited) {
-      setFavoritedArray(favoritedArray.filter((f) => f !== param));
-    }
-    setIsFavorited(!isFavorited);
   };
 
   const responsive = {
@@ -80,7 +63,6 @@ function FoodRecipe() {
   useEffect(() => {
     getRecipes();
     fetchInitDrinks();
-    setIsFavorited(favoritedArray.includes(id));
   }, []);
 
   return (
@@ -95,27 +77,12 @@ function FoodRecipe() {
           strYoutube,
         }) => (
           <div key={ idMeal }>
-            <button
-              data-testid="share-btn"
-              type="button"
-              value={ `http://localhost:3000${pathname}` }
-              // Source: https://stackoverflow.com/questions/39501289/in-reactjs-how-to-copy-text-to-clipboard
-              onClick={ ({ target }) => {
-                navigator.clipboard.writeText(target.value);
-                setShowLinkCopied(true);
-              } }
-            >
+            <button data-testid="share-btn" type="button">
               Compartilhar
             </button>
-            {showLinkCopied
-            && <p>Link copied!</p>}
-            <input
-              data-testid="favorite-btn"
-              type="image"
-              src={ isFavorited ? blackHeartIcon : whiteHeartIcon }
-              alt="favoriteRecipe"
-              onClick={ () => handleFavorite(id) }
-            />
+            <button data-testid="favorite-btn" type="button">
+              Favoitar
+            </button>
             <h3 data-testid="recipe-category">{strCategory}</h3>
             <h2 data-testid="recipe-title">{strMeal}</h2>
             <img data-testid="recipe-photo" src={ strMealThumb } alt="oi" />

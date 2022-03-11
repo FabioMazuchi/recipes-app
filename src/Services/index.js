@@ -1,96 +1,23 @@
-const TWELVE = 12;
+const MAX_LENGTH = 12;
+const URL_FOOD = 'https://www.themealdb.com/api/json/v1/1/';
+const URL_DRINK = 'https://www.thecocktaildb.com/api/json/v1/1/';
+const SEARCH_BY_FIRST_LETTER = 'search.php?f=';
 
-export const fetchFoodByIngredient = async (ingredient) => {
-  const data = await (await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${ingredient}`)).json();
-  if (data.meals.length > TWELVE) {
-    data.meals.length = TWELVE;
-  }
-  return data.meals;
-};
-
-export const fetchFoodByName = async (name) => {
-  const data = await (await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${name}`)).json();
-  if (data.meals.length > TWELVE) {
-    data.meals.length = TWELVE;
-  }
-  return data.meals;
-};
-
-export const fetchFoodByFirstLetter = async (firstLetter) => {
-  if (firstLetter.length !== 1) {
+export const fetchFoods = async (endpoint, comparison) => {
+  if (endpoint.includes(SEARCH_BY_FIRST_LETTER) && comparison.length !== 1) {
     global.alert('Your search must have only 1 (one) character');
-    return [];
   }
-  const data = await (await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?f=${firstLetter}`)).json();
-  return data.meals;
+  const data = await (await fetch(`${URL_FOOD}${endpoint}`)).json();
+  data.meals.slice(0, MAX_LENGTH);
+  return data.meals.slice(0, MAX_LENGTH);
 };
 
-export const fetchFoodRecipeById = async (id) => {
-  const data = await (await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)).json();
-  return data.meals;
-};
-
-export const fetchFoodCategories = async () => {
-  const data = await (await fetch('https://www.themealdb.com/api/json/v1/1/list.php?c=list')).json();
-  data.meals.length = 5;
-  return data.meals;
-};
-
-export const fetchFoodByCategory = async (category) => {
-  const data = await (await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`)).json();
-  if (data.meals.length > TWELVE) {
-    data.meals.length = TWELVE;
-  }
-  return data.meals;
-};
-
-export const fetchDrinkByIngredient = async (ingredient) => {
-  const data = await (await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${ingredient}`)).json();
-  if (data.drinks.length > TWELVE) {
-    data.drinks.length = TWELVE;
-  }
-  return data.drinks;
-};
-
-export const fetchDrinkByName = async (name) => {
-  const data = await (await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${name}`)).json();
-  if (data.drinks.length > TWELVE) {
-    data.drinks.length = TWELVE;
-  }
-  return data.drinks;
-};
-
-export const fetchDrinkByFirstLetter = async (firstLetter) => {
-  if (firstLetter.length !== 1) {
+export const fetchDrinks = async (endpoint, comparison) => {
+  if (endpoint.includes(SEARCH_BY_FIRST_LETTER) && comparison.length !== 1) {
     global.alert('Your search must have only 1 (one) character');
-    return [];
   }
-  const data = await (await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${firstLetter}`)).json();
-  const result = data.drinks.filter((drink) => drink.strDrink[0]
-   === firstLetter.toUpperCase());
-  if (result.length > TWELVE) {
-    result.length = TWELVE;
-  }
-  return result;
-};
-
-export const fetchDrinkRecipeById = async (id) => {
-  const data = await (await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`)).json();
-  return data.drinks;
-};
-
-export const fetchDrinkCategories = async () => {
-  const data = await (await fetch('https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list')).json();
-  data.drinks.length = 5;
-  return data.drinks;
-};
-
-export const fetchDrinkByCategory = async (category) => {
-  const data = await (await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`)).json();
-  if (data.drinks.length > TWELVE) {
-    data.drinks.length = TWELVE;
-  }
-  return data.drinks;
+  const data = await (await fetch(`${URL_DRINK}${endpoint}`)).json();
+  return data.drinks.slice(0, MAX_LENGTH);
 };
 
 export const getIngredients = (array) => {

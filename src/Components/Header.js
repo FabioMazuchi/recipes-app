@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
-import { fetchFoodRecipe, fetchDrinkRecipe } from '../Helpers';
+import { fetchFoods, fetchDrinks } from '../Services';
 import MyContext from '../MyContext/MyContext';
 
 function Header() {
@@ -10,13 +10,12 @@ function Header() {
   const { store: { setData, showSearchIcon, pageTitle } } = useContext(MyContext);
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const [searchType, setSearchType] = useState('ingredient');
+  const [searchType, setSearchType] = useState('filter.php?i=');
 
-  const handleClick = async (e) => {
-    e.preventDefault();
+  const handleClick = async (endpoint, comparison) => {
     const fetchFoodsOrDrinks = (pageTitle.includes('Foods'))
-      ? fetchFoodRecipe : fetchDrinkRecipe;
-    const data = await fetchFoodsOrDrinks(searchType, searchValue);
+      ? fetchFoods : fetchDrinks;
+    const data = await fetchFoodsOrDrinks(endpoint, comparison);
     setData(data);
     if (data.length === 1) {
       const foodOrDrinkRecipeRedirect = (
@@ -41,7 +40,7 @@ function Header() {
           <input
             id="ingredient"
             type="radio"
-            value="ingredient"
+            value="filter.php?i="
             name="filter"
             onChange={ ({ target }) => setSearchType(target.value) }
             data-testid="ingredient-search-radio"
@@ -52,7 +51,7 @@ function Header() {
           <input
             id="name"
             type="radio"
-            value="name"
+            value="search.php?s="
             name="filter"
             onChange={ ({ target }) => setSearchType(target.value) }
             data-testid="name-search-radio"
@@ -63,7 +62,7 @@ function Header() {
           <input
             id="firstLetter"
             type="radio"
-            value="firstLetter"
+            value="search.php?f="
             name="filter"
             onChange={ ({ target }) => setSearchType(target.value) }
             data-testid="first-letter-search-radio"
@@ -72,9 +71,9 @@ function Header() {
         </label>
       </div>
       <button
-        type="submit"
+        type="button"
         data-testid="exec-search-btn"
-        onClick={ handleClick }
+        onClick={ () => handleClick(`${searchType}${searchValue}`, searchValue) }
       >
         Search
       </button>
