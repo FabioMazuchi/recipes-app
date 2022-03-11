@@ -1,6 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
+<<<<<<< HEAD
 import { fetchFoodByCategory, fetchFoodCategories } from '../Services';
 
+=======
+import { fetchFoodCategories, fetchFoodByCategory } from '../Services';
+>>>>>>> 71d19cdaa0e15eb10d1d2d0c7182dc274e61c445
 import Card from '../Components/Card';
 import Footer from '../Components/Footer';
 import Header from '../Components/Header';
