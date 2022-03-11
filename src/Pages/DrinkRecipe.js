@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useHistory, Link, useLocation } from 'react-router-dom';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { fetchDrinkRecipeById, getIngredients } from '../Services';
-import whiteHeartIconSVG from '../images/whiteHeartIcon.svg';
-import blackHeartIconSVG from '../images/blackHeartIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
+import MyContext from '../MyContext/MyContext';
 
 function DrinkRecipe() {
+  const { store: {
+    favoritedArray,
+    setFavoritedArray } } = useContext(MyContext);
   const history = useHistory();
   const { pathname } = useLocation();
   const idd = pathname.split('/');
@@ -17,6 +21,8 @@ function DrinkRecipe() {
   const [initRecipe, setInitRecipe] = useState(false);
   const [showLinkCopied, setShowLinkCopied] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
+
+  console.log(recipe);
 
   const iniciarReceita = (idDrink) => {
     setInitRecipe(true);
@@ -35,6 +41,14 @@ function DrinkRecipe() {
     const res = getIngredients(response);
     setIngredients(res);
     fetchInitFoods();
+  };
+
+  const handleFavorite = (param) => {
+    setFavoritedArray([...favoritedArray, param]);
+    if (isFavorited) {
+      setFavoritedArray(favoritedArray.filter((f) => f !== param));
+    }
+    setIsFavorited(!isFavorited);
   };
 
   const responsive = {
@@ -59,6 +73,7 @@ function DrinkRecipe() {
 
   useEffect(() => {
     teste();
+    setIsFavorited(favoritedArray.includes(id));
   }, []);
 
   return (
@@ -86,17 +101,14 @@ function DrinkRecipe() {
             </button>
             {showLinkCopied
             && <p>Link copied!</p>}
-            <button
+            <input
               data-testid="favorite-btn"
-              type="button"
-              onClick={ () => setIsFavorited(!isFavorited) }
-            >
-              <img
-                src={ isFavorited
-                  ? blackHeartIconSVG : whiteHeartIconSVG }
-                alt="favorite-heart"
-              />
-            </button>
+              type="image"
+              src={ isFavorited ? blackHeartIcon : whiteHeartIcon }
+              alt="favoriteRecipe"
+              onClick={ () => handleFavorite(id) }
+            />
+
             <h3 data-testid="recipe-category">{strAlcoholic}</h3>
             <h2 data-testid="recipe-title">{strDrink}</h2>
             <img data-testid="recipe-photo" src={ strDrinkThumb } alt="oi" />

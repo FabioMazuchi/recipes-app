@@ -6,6 +6,7 @@ function MyProvider({ children }) {
   const [data, setData] = useState([]);
   const [showSearchIcon, setShowSearchIcon] = useState(true);
   const [pageTitle, setPageTitle] = useState('Foods');
+  const [favoritedArray, setFavoritedArray] = useState([]);
 
   const store = {
     data,
@@ -14,6 +15,8 @@ function MyProvider({ children }) {
     setShowSearchIcon,
     pageTitle,
     setPageTitle,
+    favoritedArray,
+    setFavoritedArray,
   };
   return (
     <main>
