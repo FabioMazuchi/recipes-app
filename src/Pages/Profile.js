@@ -6,6 +6,8 @@ import MyContext from '../MyContext/MyContext';
 function Profile() {
   const { store: { setPageTitle, setShowSearchIcon } } = useContext(MyContext);
 
+  const { email } = JSON.parse(localStorage.getItem('user'));
+
   useEffect(() => {
     setPageTitle('Profile');
     setShowSearchIcon(false);
@@ -15,7 +17,7 @@ function Profile() {
     <>
       <Header />
 
-      <h2 data-testid="profile-email"> </h2>
+      <h2 data-testid="profile-email">{ email }</h2>
 
       <button
         data-testid="profile-done-btn"
