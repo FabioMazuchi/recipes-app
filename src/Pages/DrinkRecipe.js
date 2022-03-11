@@ -1,17 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import React, { useEffect, useState, useContext } from 'react';
+import { useHistory, Link, useLocation } from 'react-router-dom';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { fetchDrinkRecipeById, getIngredients } from '../Services';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
+import MyContext from '../MyContext/MyContext';
 
 function DrinkRecipe() {
+  const { store: {
+    favoritedArray,
+    setFavoritedArray } } = useContext(MyContext);
   const history = useHistory();
-  const idd = history.location.pathname.split('/');
+  const { pathname } = useLocation();
+  const idd = pathname.split('/');
   const id = idd[idd.length - 1];
   const [recipe, setRecipe] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [recipeFoods, setRecipeFoods] = useState([]);
   const [initRecipe, setInitRecipe] = useState(false);
+  const [showLinkCopied, setShowLinkCopied] = useState(false);
+  const [isFavorited, setIsFavorited] = useState(false);
+
+  console.log(recipe);
 
   const iniciarReceita = (idDrink) => {
     setInitRecipe(true);
@@ -21,9 +32,7 @@ function DrinkRecipe() {
   const fetchInitFoods = async () => {
     const result = await (await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=')).json();
     result.meals.length = 6;
-    console.log(result.meals);
     setRecipeFoods(result.meals);
-    console.log(recipeFoods);
   };
 
   const teste = async () => {
@@ -32,6 +41,14 @@ function DrinkRecipe() {
     const res = getIngredients(response);
     setIngredients(res);
     fetchInitFoods();
+  };
+
+  const handleFavorite = (param) => {
+    setFavoritedArray([...favoritedArray, param]);
+    if (isFavorited) {
+      setFavoritedArray(favoritedArray.filter((f) => f !== param));
+    }
+    setIsFavorited(!isFavorited);
   };
 
   const responsive = {
@@ -56,6 +73,7 @@ function DrinkRecipe() {
 
   useEffect(() => {
     teste();
+    setIsFavorited(favoritedArray.includes(id));
   }, []);
 
   return (
@@ -69,12 +87,28 @@ function DrinkRecipe() {
           strAlcoholic,
         }) => (
           <div key={ idDrink }>
-            <button data-testid="share-btn" type="button">
+            <button
+              data-testid="share-btn"
+              type="button"
+              value={ `http://localhost:3000${pathname}` }
+              // Source: https://stackoverflow.com/questions/39501289/in-reactjs-how-to-copy-text-to-clipboard
+              onClick={ ({ target }) => {
+                navigator.clipboard.writeText(target.value);
+                setShowLinkCopied(true);
+              } }
+            >
               Compartilhar
             </button>
-            <button data-testid="favorite-btn" type="button">
-              Favoitar
-            </button>
+            {showLinkCopied
+            && <p>Link copied!</p>}
+            <input
+              data-testid="favorite-btn"
+              type="image"
+              src={ isFavorited ? blackHeartIcon : whiteHeartIcon }
+              alt="favoriteRecipe"
+              onClick={ () => handleFavorite(id) }
+            />
+
             <h3 data-testid="recipe-category">{strAlcoholic}</h3>
             <h2 data-testid="recipe-title">{strDrink}</h2>
             <img data-testid="recipe-photo" src={ strDrinkThumb } alt="oi" />
