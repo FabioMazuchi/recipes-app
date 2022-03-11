@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory, Link, useLocation } from 'react-router-dom';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { fetchFoodRecipeById, getIngredients } from '../Services';
+import whiteHeartIconSVG from '../images/whiteHeartIcon.svg';
+import blackHeartIconSVG from '../images/blackHeartIcon.svg';
 
 function FoodRecipe() {
   const history = useHistory();
-  const idd = history.location.pathname.split('/');
+  const { pathname } = useLocation();
+  const idd = pathname.split('/');
   const id = idd[idd.length - 1];
   const [recipe, setRecipe] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [embedYoutube, setEmbedYoutube] = useState('');
   const [recipeDrinks, setRecipeDrinks] = useState([]);
   const [initRecipe, setInitRecipe] = useState(false);
+  const [showLinkCopied, setShowLinkCopied] = useState(false);
+  const [isFavorited, setIsFavorited] = useState(false);
 
   const iniciarReceita = (idMeal) => {
     setInitRecipe(true);
@@ -78,11 +83,30 @@ function FoodRecipe() {
           strYoutube,
         }) => (
           <div key={ idMeal }>
-            <button data-testid="share-btn" type="button">
+            <button
+              data-testid="share-btn"
+              type="button"
+              value={ `http://localhost:3000${pathname}` }
+              // Source: https://stackoverflow.com/questions/39501289/in-reactjs-how-to-copy-text-to-clipboard
+              onClick={ ({ target }) => {
+                navigator.clipboard.writeText(target.value);
+                setShowLinkCopied(true);
+              } }
+            >
               Compartilhar
             </button>
-            <button data-testid="favorite-btn" type="button">
-              Favoitar
+            {showLinkCopied
+            && <p>Link copied!</p>}
+            <button
+              data-testid="favorite-btn"
+              type="button"
+              onClick={ () => setIsFavorited(!isFavorited) }
+            >
+              <img
+                src={ isFavorited
+                  ? blackHeartIconSVG : whiteHeartIconSVG }
+                alt="favorite-heart"
+              />
             </button>
             <h3 data-testid="recipe-category">{strCategory}</h3>
             <h2 data-testid="recipe-title">{strMeal}</h2>
