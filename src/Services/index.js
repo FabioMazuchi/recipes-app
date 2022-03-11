@@ -110,3 +110,25 @@ export const getIngredients = (array) => {
   }), []);
   return finalResult;
 };
+
+export const saveFoodFavStorage = (obj) => {
+  const { idMeal, strArea, strCategory, strMeal, strMealThumb } = obj[0];
+  const array = [];
+  const object = {
+    idMeal,
+    type: 'food',
+    strArea,
+    strCategory,
+    alcoholicOrNot: '',
+    strMeal,
+    strMealThumb };
+  const res = localStorage.getItem('favoriteRecipes');
+  if (res === null) {
+    array.push(object);
+    localStorage.setItem('favoriteRecipes', JSON.stringify(array));
+  } else {
+    const valor = JSON.parse(res);
+    valor.push(object);
+    localStorage.setItem('favoriteRecipes', JSON.stringify(valor));
+  }
+};
