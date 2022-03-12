@@ -85,16 +85,15 @@ export const saveFoodFavStorage = (obj) => {
 };
 
 const returnObjDrink = (obj) => {
-  const { idDrink, strArea, strCategory, strMeal,
-    alcoholicOrNot: alcolic, strMealThumb } = obj[0];
+  const { idDrink, strCategory, strDrink, strAlcoholic, strDrinkThumb } = obj[0];
   const object = {
     id: idDrink,
-    type: 'drynk',
-    nationality: strArea,
+    type: 'drink',
+    nationality: '',
     category: strCategory,
-    alcoholicOrNot: alcolic,
-    name: strMeal,
-    image: strMealThumb };
+    alcoholicOrNot: strAlcoholic,
+    name: strDrink,
+    image: strDrinkThumb };
   return object;
 };
 
