@@ -37,3 +37,76 @@ export const getIngredients = (array) => {
   }), []);
   return finalResult;
 };
+
+const returnObjFood = (obj) => {
+  const { idMeal, strArea, strCategory, strMeal, strMealThumb } = obj[0];
+  const object = {
+    id: idMeal,
+    type: 'food',
+    nationality: strArea,
+    category: strCategory,
+    alcoholicOrNot: '',
+    name: strMeal,
+    image: strMealThumb };
+  return object;
+};
+
+export const removeFavStorageFood = (id) => {
+  console.log(id);
+  const res = localStorage.getItem('favoriteRecipes');
+  if (res !== null) {
+    const valor = JSON.parse(res);
+    const filtro = valor.filter(({ id: idMeal }) => idMeal !== id);
+    localStorage.setItem('favoriteRecipes', JSON.stringify(filtro));
+  }
+};
+
+export const removeFavStorageDrink = (id) => {
+  const res = localStorage.getItem('favoriteRecipes');
+  if (res !== null) {
+    const valor = JSON.parse(res);
+    const filtro = valor.filter(({ id: idDrink }) => idDrink !== id);
+    localStorage.setItem('favoriteRecipes', JSON.stringify(filtro));
+  }
+};
+
+export const saveFoodFavStorage = (obj) => {
+  const fav = returnObjFood(obj);
+  const array = [];
+  const res = localStorage.getItem('favoriteRecipes');
+  if (res === null) {
+    array.push(fav);
+    localStorage.setItem('favoriteRecipes', JSON.stringify(array));
+  } else {
+    const valor = JSON.parse(res);
+    valor.push(fav);
+    localStorage.setItem('favoriteRecipes', JSON.stringify(valor));
+  }
+};
+
+const returnObjDrink = (obj) => {
+  const { idDrink, strCategory, strDrink, strAlcoholic, strDrinkThumb } = obj[0];
+  const object = {
+    id: idDrink,
+    type: 'drink',
+    nationality: '',
+    category: strCategory,
+    alcoholicOrNot: strAlcoholic,
+    name: strDrink,
+    image: strDrinkThumb };
+  return object;
+};
+
+export const saveDrinkFavStorage = (obj) => {
+  const fav = returnObjDrink(obj);
+  const array = [];
+  const res = localStorage.getItem('favoriteRecipes');
+  if (res === null) {
+    array.push(fav);
+    localStorage.setItem('favoriteRecipes', JSON.stringify(array));
+  } else {
+    const valor = JSON.parse(res);
+    valor.push(fav);
+    localStorage.setItem('favoriteRecipes', JSON.stringify(valor));
+  }
+};

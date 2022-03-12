@@ -8,7 +8,6 @@ function Profile() {
   const { store: { setPageTitle, setShowSearchIcon } } = useContext(MyContext);
   const history = useHistory();
   const { email } = JSON.parse(localStorage.getItem('user'));
-  console.log(email);
 
   useEffect(() => {
     setPageTitle('Profile');

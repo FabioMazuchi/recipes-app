@@ -1,18 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory, Link, useLocation } from 'react-router-dom';
 import Carousel from 'react-multi-carousel';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 import 'react-multi-carousel/lib/styles.css';
-import { fetchFoods, getIngredients } from '../Services';
+import { fetchFoods, getIngredients, removeFavStorageFood,
+  saveFoodFavStorage } from '../Services';
 
 function FoodRecipe() {
   const history = useHistory();
   const idd = history.location.pathname.split('/');
   const id = idd[idd.length - 1];
   const [recipe, setRecipe] = useState([]);
+  const { pathname } = useLocation();
   const [ingredients, setIngredients] = useState([]);
   const [embedYoutube, setEmbedYoutube] = useState('');
   const [recipeDrinks, setRecipeDrinks] = useState([]);
   const [initRecipe, setInitRecipe] = useState(false);
+  const [showLinkCopied, setShowLinkCopied] = useState(false);
+  const [isFavorited, setIsFavorited] = useState(false);
+  const [favoritar, setFavoritar] = useState(false);
+  const [countFav, setCountFav] = useState(0);
+
+  const getFavStorage = () => {
+    const res = localStorage.getItem('favoriteRecipes');
+    const array = JSON.parse(res);
+    if (array !== null) {
+      const check = array.some(({ id: idMeal }) => idMeal === id);
+      if (check) {
+        setIsFavorited(true);
+        setFavoritar(true);
+      } else {
+        setIsFavorited(false);
+        setFavoritar(false);
+      }
+    }
+  };
 
   const iniciarReceita = (idMeal) => {
     setInitRecipe(true);
@@ -60,10 +83,28 @@ function FoodRecipe() {
     },
   };
 
+  const favoritarReceita = () => {
+    setFavoritar(!favoritar);
+    setCountFav((prev) => prev + 1);
+  };
+
   useEffect(() => {
     getRecipes();
     fetchInitDrinks();
+    getFavStorage();
   }, []);
+
+  useEffect(() => {
+    if (countFav !== 0) {
+      if (favoritar) {
+        saveFoodFavStorage(recipe);
+        setIsFavorited(true);
+      } else {
+        removeFavStorageFood(id);
+        setIsFavorited(false);
+      }
+    }
+  }, [favoritar]);
 
   return (
     <>
@@ -77,12 +118,27 @@ function FoodRecipe() {
           strYoutube,
         }) => (
           <div key={ idMeal }>
-            <button data-testid="share-btn" type="button">
+            <button
+              data-testid="share-btn"
+              type="button"
+              value={ `http://localhost:3000${pathname}` }
+              // Source: https://stackoverflow.com/questions/39501289/in-reactjs-how-to-copy-text-to-clipboard
+              onClick={ ({ target }) => {
+                navigator.clipboard.writeText(target.value);
+                setShowLinkCopied(true);
+              } }
+            >
               Compartilhar
             </button>
-            <button data-testid="favorite-btn" type="button">
-              Favoitar
-            </button>
+            {showLinkCopied
+            && <p>Link copied!</p>}
+            <input
+              data-testid="favorite-btn"
+              type="image"
+              src={ isFavorited ? blackHeartIcon : whiteHeartIcon }
+              alt="favoriteRecipe"
+              onClick={ () => favoritarReceita() }
+            />
             <h3 data-testid="recipe-category">{strCategory}</h3>
             <h2 data-testid="recipe-title">{strMeal}</h2>
             <img data-testid="recipe-photo" src={ strMealThumb } alt="oi" />

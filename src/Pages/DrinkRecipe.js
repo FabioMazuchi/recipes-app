@@ -1,16 +1,13 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, Link, useLocation } from 'react-router-dom';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import { fetchDrinks, getIngredients } from '../Services';
+import { fetchDrinks, getIngredients, removeFavStorageDrink,
+  saveDrinkFavStorage } from '../Services';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
-import MyContext from '../MyContext/MyContext';
 
 function DrinkRecipe() {
-  const { store: {
-    favoritedArray,
-    setFavoritedArray } } = useContext(MyContext);
   const history = useHistory();
   const { pathname } = useLocation();
   const idd = pathname.split('/');
@@ -21,8 +18,23 @@ function DrinkRecipe() {
   const [initRecipe, setInitRecipe] = useState(false);
   const [showLinkCopied, setShowLinkCopied] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
+  const [favoritar, setFavoritar] = useState(false);
+  const [countFav, setCountFav] = useState(0);
 
-  console.log(recipe);
+  const getFavStorage = () => {
+    const res = localStorage.getItem('favoriteRecipes');
+    const array = JSON.parse(res);
+    if (array !== null) {
+      const check = array.some(({ id: idDrink }) => idDrink === id);
+      if (check) {
+        setIsFavorited(true);
+        setFavoritar(true);
+      } else {
+        setIsFavorited(false);
+        setFavoritar(false);
+      }
+    }
+  };
 
   const iniciarReceita = (idDrink) => {
     setInitRecipe(true);
@@ -41,14 +53,6 @@ function DrinkRecipe() {
     const res = getIngredients(response);
     setIngredients(res);
     fetchInitFoods();
-  };
-
-  const handleFavorite = (param) => {
-    setFavoritedArray([...favoritedArray, param]);
-    if (isFavorited) {
-      setFavoritedArray(favoritedArray.filter((f) => f !== param));
-    }
-    setIsFavorited(!isFavorited);
   };
 
   const responsive = {
@@ -71,10 +75,27 @@ function DrinkRecipe() {
     },
   };
 
+  const favoritarReceita = () => {
+    setFavoritar(!favoritar);
+    setCountFav((prev) => prev + 1);
+  };
+
   useEffect(() => {
     teste();
-    setIsFavorited(favoritedArray.includes(id));
+    getFavStorage();
   }, []);
+
+  useEffect(() => {
+    if (countFav !== 0) {
+      if (favoritar) {
+        saveDrinkFavStorage(recipe);
+        setIsFavorited(true);
+      } else {
+        removeFavStorageDrink(id);
+        setIsFavorited(false);
+      }
+    }
+  }, [favoritar]);
 
   return (
     <>
@@ -106,7 +127,7 @@ function DrinkRecipe() {
               type="image"
               src={ isFavorited ? blackHeartIcon : whiteHeartIcon }
               alt="favoriteRecipe"
-              onClick={ () => handleFavorite(id) }
+              onClick={ () => favoritarReceita() }
             />
 
             <h3 data-testid="recipe-category">{strAlcoholic}</h3>
