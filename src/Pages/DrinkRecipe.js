@@ -8,9 +8,6 @@ import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 function DrinkRecipe() {
-  // const { store: {
-  //   favoritedArray,
-  //   setFavoritedArray } } = useContext(MyContext);
   const history = useHistory();
   const { pathname } = useLocation();
   const idd = pathname.split('/');
@@ -58,14 +55,6 @@ function DrinkRecipe() {
     fetchInitFoods();
   };
 
-  // const handleFavorite = (param) => {
-  //   setFavoritedArray([...favoritedArray, param]);
-  //   if (isFavorited) {
-  //     setFavoritedArray(favoritedArray.filter((f) => f !== param));
-  //   }
-  //   setIsFavorited(!isFavorited);
-  // };
-
   const responsive = {
     superLargeDesktop: {
       // the naming can be any, depends on you.
@@ -93,7 +82,6 @@ function DrinkRecipe() {
 
   useEffect(() => {
     teste();
-    // setIsFavorited(favoritedArray.includes(id));
     getFavStorage();
   }, []);
 

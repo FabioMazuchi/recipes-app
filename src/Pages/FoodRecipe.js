@@ -6,12 +6,8 @@ import blackHeartIcon from '../images/blackHeartIcon.svg';
 import 'react-multi-carousel/lib/styles.css';
 import { fetchFoods, getIngredients, removeFavStorageFood,
   saveFoodFavStorage } from '../Services';
-// import MyContext from '../MyContext/MyContext';
 
 function FoodRecipe() {
-  // const { store: {
-  //   favoritedArray,
-  //   setFavoritedArray } } = useContext(MyContext);
   const history = useHistory();
   const idd = history.location.pathname.split('/');
   const id = idd[idd.length - 1];
@@ -67,15 +63,6 @@ function FoodRecipe() {
     getIdVideo(response);
   };
 
-  // const handleFavorite = (param, obj) => {
-  //   setFavoritedArray([...favoritedArray, param]);
-  //   if (isFavorited) {
-  //     setFavoritedArray(favoritedArray.filter((f) => f !== param));
-  //   }
-  //   setIsFavorited(!isFavorited);
-  //   saveFoodFavStorage(obj);
-  // };
-
   const responsive = {
     superLargeDesktop: {
       // the naming can be any, depends on you.
@@ -105,7 +92,6 @@ function FoodRecipe() {
     getRecipes();
     fetchInitDrinks();
     getFavStorage();
-    // setIsFavorited(favoritedArray.includes(id));
   }, []);
 
   useEffect(() => {
@@ -151,7 +137,6 @@ function FoodRecipe() {
               type="image"
               src={ isFavorited ? blackHeartIcon : whiteHeartIcon }
               alt="favoriteRecipe"
-              // onClick={ () => handleFavorite(id) }
               onClick={ () => favoritarReceita() }
             />
             <h3 data-testid="recipe-category">{strCategory}</h3>
