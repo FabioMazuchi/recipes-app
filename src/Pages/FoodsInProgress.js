@@ -15,16 +15,10 @@ function FoodsInProgress() {
     foodIngredients } } = useContext(MyContext);
   const { id } = useParams();
   const { pathname } = useLocation();
-  console.log(pathname.split('/')[2]);
+  // console.log(pathname.split('/')[2]);
   const [showLinkCopied, setShowLinkCopied] = useState(false);
 
-  const handleChange = () => {
-    console.log('oi');
-  };
-
   useEffect(() => {
-    // Tirar esse if ao final do projeto;
-    // Está presente apenas para não quebrar o teste;
     const setFoodAndIngredientsEffect = async () => {
       if (!foodRecipe.length) {
         const data = await fetchFoods(`lookup.php?i=${id}`);
@@ -76,7 +70,7 @@ function FoodsInProgress() {
                 key={ i }
                 ingredient={ ingredient }
                 measure={ measure }
-                onChange={ handleChange }
+                name={ i }
               />
             ))}
             <h3>Modo de preparo:</h3>

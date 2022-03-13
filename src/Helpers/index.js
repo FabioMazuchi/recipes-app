@@ -112,3 +112,22 @@ export const removeFavStorageDrink = (id) => {
     localStorage.setItem('favoriteRecipes', JSON.stringify(filtro));
   }
 };
+
+// const createRecipeObject = (id, ingredientList) => {
+//   const obj = {
+//     meals: {
+//       id: [...ingredientList],
+//     },
+//   };
+//   return obj;
+// };
+
+export const saveProgress = (id, ingredient) => {
+  const obj = {
+    meals: {
+      [id]: [...ingredient, ingredient],
+    },
+  };
+  console.log(obj);
+  return obj;
+};
