@@ -1,18 +1,39 @@
-import React, { useContext, useState } from 'react';
-// import { useParams, useLocation } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
-
+import React, { useContext, useEffect, useState } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
+import { fetchFoods } from '../Services';
+import { getIngredients } from '../Helpers';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import MyContext from '../MyContext/MyContext';
+import Checkbox from '../Components/Checkbox';
 
 function FoodsInProgress() {
   const { store: { isFavorited,
+    setFoodRecipe,
+    setFoodIngredients,
     foodRecipe,
     foodIngredients } } = useContext(MyContext);
-  //   const { id } = useParams();
+  const { id } = useParams();
   const { pathname } = useLocation();
+  console.log(pathname.split('/')[2]);
   const [showLinkCopied, setShowLinkCopied] = useState(false);
+
+  const handleChange = () => {
+    console.log('oi');
+  };
+
+  useEffect(() => {
+    // Tirar esse if ao final do projeto;
+    // Está presente apenas para não quebrar o teste;
+    const setFoodAndIngredientsEffect = async () => {
+      if (!foodRecipe.length) {
+        const data = await fetchFoods(`lookup.php?i=${id}`);
+        setFoodRecipe(data);
+        setFoodIngredients(getIngredients(data));
+      }
+    };
+    setFoodAndIngredientsEffect();
+  }, []);
 
   return (
     <>
@@ -51,18 +72,24 @@ function FoodsInProgress() {
             <img data-testid="recipe-photo" src={ strMealThumb } alt="oi" />
             <h2>Ingredientes:</h2>
             {foodIngredients.map(({ ingredient, measure }, i) => (
-              <p
-                data-testid={ `${i}-ingredient-step` }
+              <Checkbox
                 key={ i }
-              >
-                { `${ingredient} - ${measure}` }
-              </p>
+                ingredient={ ingredient }
+                measure={ measure }
+                onChange={ handleChange }
+              />
             ))}
             <h3>Modo de preparo:</h3>
             <p data-testid="instructions">{strInstructions}</p>
           </div>
         ),
       )}
+      <button
+        data-testid="finish-recipe-btn"
+        type="button"
+      >
+        Finalizar Receita
+      </button>
     </>
   );
 }
