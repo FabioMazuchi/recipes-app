@@ -6,7 +6,12 @@ function MyProvider({ children }) {
   const [data, setData] = useState([]);
   const [showSearchIcon, setShowSearchIcon] = useState(true);
   const [pageTitle, setPageTitle] = useState('Foods');
-  const [favoritedArray, setFavoritedArray] = useState([]);
+  const [isFavorited, setIsFavorited] = useState(false);
+  const [foodRecipe, setFoodRecipe] = useState([]);
+  const [drinkRecipe, setDrinkRecipe] = useState([]);
+  const [foodIngredients, setFoodIngredients] = useState([]);
+  const [drinkIngredients, setDrinkIngredients] = useState([]);
+  const [initRecipe, setInitRecipe] = useState(false);
 
   const store = {
     data,
@@ -15,8 +20,18 @@ function MyProvider({ children }) {
     setShowSearchIcon,
     pageTitle,
     setPageTitle,
-    favoritedArray,
-    setFavoritedArray,
+    isFavorited,
+    setIsFavorited,
+    foodRecipe,
+    setFoodRecipe,
+    foodIngredients,
+    setFoodIngredients,
+    drinkRecipe,
+    setDrinkRecipe,
+    drinkIngredients,
+    setDrinkIngredients,
+    initRecipe,
+    setInitRecipe,
   };
   return (
     <main>

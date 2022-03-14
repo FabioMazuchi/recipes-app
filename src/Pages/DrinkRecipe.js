@@ -1,58 +1,40 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory, Link, useLocation } from 'react-router-dom';
+import React, { useEffect, useState, useContext } from 'react';
+import { useHistory, Link, useLocation, useParams } from 'react-router-dom';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import { fetchDrinks, getIngredients, removeFavStorageDrink,
-  saveDrinkFavStorage } from '../Services';
+import { getIngredients,
+  checkDrinkIsFavorited,
+  removeFavStorageDrink,
+  saveDrinkFavStorage } from '../Helpers';
+import { fetchDrinks, fetchFoods } from '../Services';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
+import MyContext from '../MyContext/MyContext';
 
 function DrinkRecipe() {
-  const history = useHistory();
+  const { store: { isFavorited,
+    setIsFavorited,
+    drinkRecipe,
+    setDrinkRecipe,
+    drinkIngredients,
+    setDrinkIngredients,
+    initRecipe,
+    setInitRecipe } } = useContext(MyContext);
+  const SIX = 6;
   const { pathname } = useLocation();
-  const idd = pathname.split('/');
-  const id = idd[idd.length - 1];
-  const [recipe, setRecipe] = useState([]);
-  const [ingredients, setIngredients] = useState([]);
+  const { id } = useParams();
+  const history = useHistory();
   const [recipeFoods, setRecipeFoods] = useState([]);
-  const [initRecipe, setInitRecipe] = useState(false);
   const [showLinkCopied, setShowLinkCopied] = useState(false);
-  const [isFavorited, setIsFavorited] = useState(false);
-  const [favoritar, setFavoritar] = useState(false);
-  const [countFav, setCountFav] = useState(0);
-
-  const getFavStorage = () => {
-    const res = localStorage.getItem('favoriteRecipes');
-    const array = JSON.parse(res);
-    if (array !== null) {
-      const check = array.some(({ id: idDrink }) => idDrink === id);
-      if (check) {
-        setIsFavorited(true);
-        setFavoritar(true);
-      } else {
-        setIsFavorited(false);
-        setFavoritar(false);
-      }
-    }
-  };
 
   const iniciarReceita = (idDrink) => {
     setInitRecipe(true);
     history.push(`/drinks/${idDrink}/in-progress`);
   };
 
-  const fetchInitFoods = async () => {
-    const result = await (await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=')).json();
-    result.meals.length = 6;
-    setRecipeFoods(result.meals);
-  };
-
-  const teste = async () => {
-    const response = await fetchDrinks(`lookup.php?i=${id}`);
-    setRecipe(response);
-    const res = getIngredients(response);
-    setIngredients(res);
-    fetchInitFoods();
+  const handleClick = () => {
+    setIsFavorited(!isFavorited);
+    return !isFavorited ? saveDrinkFavStorage(drinkRecipe) : removeFavStorageDrink(id);
   };
 
   const responsive = {
@@ -75,31 +57,41 @@ function DrinkRecipe() {
     },
   };
 
-  const favoritarReceita = () => {
-    setFavoritar(!favoritar);
-    setCountFav((prev) => prev + 1);
-  };
-
   useEffect(() => {
-    teste();
-    getFavStorage();
+    const setRecipeEffect = async () => {
+      setDrinkRecipe(await fetchDrinks(`lookup.php?i=${id}`));
+    };
+    setRecipeEffect();
   }, []);
 
   useEffect(() => {
-    if (countFav !== 0) {
-      if (favoritar) {
-        saveDrinkFavStorage(recipe);
-        setIsFavorited(true);
-      } else {
-        removeFavStorageDrink(id);
-        setIsFavorited(false);
+    const setIngredientsEffect = async () => {
+      if (drinkRecipe.length) {
+        setDrinkIngredients(getIngredients(drinkRecipe));
       }
-    }
-  }, [favoritar]);
+    };
+    setIngredientsEffect();
+  }, [drinkRecipe]);
+
+  useEffect(() => {
+    const setRecipeFoodsEffect = async () => {
+      const data = await fetchFoods('search.php?s=');
+      setRecipeFoods(data.slice(0, SIX));
+    };
+    setRecipeFoodsEffect();
+  }, []);
+
+  useEffect(() => {
+    const setIsFavoritedEffect = () => {
+      const check = checkDrinkIsFavorited(id);
+      setIsFavorited(check);
+    };
+    setIsFavoritedEffect();
+  }, []);
 
   return (
     <>
-      {recipe.map(
+      {drinkRecipe.map(
         ({
           idDrink,
           strDrink,
@@ -127,14 +119,14 @@ function DrinkRecipe() {
               type="image"
               src={ isFavorited ? blackHeartIcon : whiteHeartIcon }
               alt="favoriteRecipe"
-              onClick={ () => favoritarReceita() }
+              onClick={ handleClick }
             />
 
             <h3 data-testid="recipe-category">{strAlcoholic}</h3>
             <h2 data-testid="recipe-title">{strDrink}</h2>
             <img data-testid="recipe-photo" src={ strDrinkThumb } alt="oi" />
             <h2>Ingredientes:</h2>
-            {ingredients.map(({ ingredient, measure }, i) => (
+            {drinkIngredients.map(({ ingredient, measure }, i) => (
               <p data-testid={ `${i}-ingredient-name-and-measure` } key={ i }>
                 {`${ingredient} - ${measure}` }
               </p>

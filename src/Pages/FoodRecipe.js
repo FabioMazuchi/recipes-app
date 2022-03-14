@@ -1,67 +1,76 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory, Link, useLocation } from 'react-router-dom';
+import React, { useEffect, useState, useContext } from 'react';
+import { Link, useParams, useHistory, useLocation } from 'react-router-dom';
 import Carousel from 'react-multi-carousel';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import 'react-multi-carousel/lib/styles.css';
-import { fetchFoods, getIngredients, removeFavStorageFood,
-  saveFoodFavStorage } from '../Services';
+import { fetchFoods, fetchDrinks } from '../Services';
+import { checkFoodIsFavorited,
+  getIngredients,
+  saveFoodFavStorage,
+  removeFavStorageFood } from '../Helpers';
+import MyContext from '../MyContext/MyContext';
 
 function FoodRecipe() {
-  const history = useHistory();
-  const idd = history.location.pathname.split('/');
-  const id = idd[idd.length - 1];
-  const [recipe, setRecipe] = useState([]);
+  const { store: { isFavorited,
+    setIsFavorited,
+    foodRecipe,
+    setFoodRecipe,
+    foodIngredients,
+    setFoodIngredients,
+    initRecipe,
+    setInitRecipe } } = useContext(MyContext);
+  const SIX = 6;
   const { pathname } = useLocation();
-  const [ingredients, setIngredients] = useState([]);
-  const [embedYoutube, setEmbedYoutube] = useState('');
+  const { id } = useParams();
+  const history = useHistory();
   const [recipeDrinks, setRecipeDrinks] = useState([]);
-  const [initRecipe, setInitRecipe] = useState(false);
   const [showLinkCopied, setShowLinkCopied] = useState(false);
-  const [isFavorited, setIsFavorited] = useState(false);
-  const [favoritar, setFavoritar] = useState(false);
-  const [countFav, setCountFav] = useState(0);
 
-  const getFavStorage = () => {
-    const res = localStorage.getItem('favoriteRecipes');
-    const array = JSON.parse(res);
-    if (array !== null) {
-      const check = array.some(({ id: idMeal }) => idMeal === id);
-      if (check) {
-        setIsFavorited(true);
-        setFavoritar(true);
-      } else {
-        setIsFavorited(false);
-        setFavoritar(false);
-      }
-    }
-  };
+  // Deixei essa função genérica, pois terá que ser utilizada na page FoodsInProgress, e a passei para o arquivo das funções Helpers;
+  // com o nome de checkFoodIsFavorited;
+  // const getFavStorage = () => {
+  //   const res = localStorage.getItem('favoriteRecipes');
+  // const array = JSON.parse(res);
+  //   if (array !== null) {
+  //     const check = array.some(({ id: idMeal }) => idMeal === id);
+  //     if (check) {
+  //       setIsFavorited(true);
+  //       setFavoritar(true);
+  //     } else {
+  //       setIsFavorited(false);
+  //       setFavoritar(false);
+  //     }
+  //   }
+  // };
 
-  const iniciarReceita = (idMeal) => {
-    setInitRecipe(true);
-    history.push(`/foods/${idMeal}/in-progress`);
-  };
+  // Passei essa função direto pro handleClick;
+  // const iniciarReceita = (idMeal) => {
+  //   setInitRecipe(true);
+  //   history.push(`/foods/${idMeal}/in-progress`);
+  // };
 
-  const fetchInitDrinks = async () => {
-    const result = await (await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=')).json();
-    result.drinks.length = 6;
-    setRecipeDrinks(result.drinks);
-  };
+  // const fetchInitDrinks = async () => {
+  //   const result = await (await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=')).json();
+  //   result.drinks.length = 6;
+  //   setRecipeDrinks(result.drinks);
+  // };
 
-  const getIdVideo = (array) => {
-    const { strYoutube } = array[0];
-    const IdYoutube = strYoutube.split('=')[1];
-    const result = `https://www.youtube.com/embed/${IdYoutube}`;
-    setEmbedYoutube(result);
-  };
+  // Fiz esta função ocorrer direto no embed do Youtube, no HTML;
+  // const getIdVideo = (array) => {
+  //   const { strYoutube } = array[0];
+  //   const IdYoutube = strYoutube.split('=')[1];
+  //   const result = `https://www.youtube.com/embed/${IdYoutube}`;
+  //   setEmbedYoutube(result);
+  // };
 
-  const getRecipes = async () => {
-    const response = await fetchFoods(`lookup.php?i=${id}`);
-    setRecipe(response);
-    const res = getIngredients(response);
-    setIngredients(res);
-    getIdVideo(response);
-  };
+  // const getRecipes = async () => {
+  //   const response = await fetchFoods(`lookup.php?i=${id}`);
+  //   setRecipe(response);
+  //   const res = getIngredients(response);
+  //   setIngredients(res);
+  //   getIdVideo(response);
+  // };
 
   const responsive = {
     superLargeDesktop: {
@@ -83,32 +92,63 @@ function FoodRecipe() {
     },
   };
 
-  const favoritarReceita = () => {
-    setFavoritar(!favoritar);
-    setCountFav((prev) => prev + 1);
+  const handleClick = () => {
+    setIsFavorited(!isFavorited);
+    return !isFavorited ? saveFoodFavStorage(foodRecipe) : removeFavStorageFood(id);
   };
 
+  // Vi alguns vídeos sobre boas práticas do useEffect e constatei que o melhor é separar cada useEffect para uma função única;
+  // Refatorei esta parte para o nosso código ficar mais agradável para a leitura;
   useEffect(() => {
-    getRecipes();
-    fetchInitDrinks();
-    getFavStorage();
+    const setRecipeEffect = async () => {
+      setFoodRecipe(await fetchFoods(`lookup.php?i=${id}`));
+    };
+    setRecipeEffect();
   }, []);
 
   useEffect(() => {
-    if (countFav !== 0) {
-      if (favoritar) {
-        saveFoodFavStorage(recipe);
-        setIsFavorited(true);
-      } else {
-        removeFavStorageFood(id);
-        setIsFavorited(false);
+    const setIngredientsEffect = async () => {
+      // Esse if foi só para não quebrar o teste - aplicação funciona normal sem;
+      if (foodRecipe.length) {
+        setFoodIngredients(getIngredients(foodRecipe));
       }
-    }
-  }, [favoritar]);
+    };
+    setIngredientsEffect();
+  }, [foodRecipe]);
+
+  useEffect(() => {
+    const setRecipeDrinksEffect = async () => {
+      const data = await fetchDrinks('search.php?s=');
+      setRecipeDrinks(data.slice(0, SIX));
+    };
+    setRecipeDrinksEffect();
+  }, []);
+
+  useEffect(() => {
+    const setIsFavoritedEffect = () => {
+      const check = checkFoodIsFavorited(id);
+      setIsFavorited(check);
+    };
+    setIsFavoritedEffect();
+  }, []);
+
+  // Refatorei esta função, para passar a utilizar um handleClick no botão de favoritar;
+  // useEffect(() => {
+  //   if (countFav !== 0) {
+  //     console.log(countFav);
+  //     if (favoritar) {
+  //       saveFoodFavStorage(recipe);
+  //       setIsFavorited(true);
+  //     } else {
+  //       removeFavStorageFood(id);
+  //       setIsFavorited(false);
+  //     }
+  //   }
+  // }, [favoritar]);
 
   return (
     <>
-      {recipe.map(
+      {foodRecipe.map(
         ({
           idMeal,
           strCategory,
@@ -137,13 +177,13 @@ function FoodRecipe() {
               type="image"
               src={ isFavorited ? blackHeartIcon : whiteHeartIcon }
               alt="favoriteRecipe"
-              onClick={ () => favoritarReceita() }
+              onClick={ handleClick }
             />
             <h3 data-testid="recipe-category">{strCategory}</h3>
             <h2 data-testid="recipe-title">{strMeal}</h2>
             <img data-testid="recipe-photo" src={ strMealThumb } alt="oi" />
             <h2>Ingredientes:</h2>
-            {ingredients.map(({ ingredient, measure }, i) => (
+            {foodIngredients.map(({ ingredient, measure }, i) => (
               <p
                 data-testid={ `${i}-ingredient-name-and-measure` }
                 key={ i }
@@ -153,13 +193,17 @@ function FoodRecipe() {
             ))}
             <h3>Modo de preparo:</h3>
             <p data-testid="instructions">{strInstructions}</p>
-            <Link data-testid="video" target="_blank" to={ strYoutube }>
+            <a
+              data-testid="video"
+              href={ strYoutube }
+            >
               Video
-            </Link>
+
+            </a>
             <iframe
               width="560"
               height="315"
-              src={ embedYoutube }
+              src={ `https://www.youtube.com/embed/${strYoutube.split('=')[1]}` }
               title="YouTube video player"
               frameBorder="0"
               allowFullScreen
@@ -177,7 +221,10 @@ function FoodRecipe() {
               ))}
             </Carousel>
             <button
-              onClick={ () => iniciarReceita(idMeal) }
+              onClick={ () => {
+                setInitRecipe(true);
+                history.push(`/foods/${idMeal}/in-progress`);
+              } }
               className="startRecipe"
               type="button"
               data-testid="start-recipe-btn"
