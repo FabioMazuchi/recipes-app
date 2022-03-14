@@ -27,51 +27,6 @@ function FoodRecipe() {
   const [recipeDrinks, setRecipeDrinks] = useState([]);
   const [showLinkCopied, setShowLinkCopied] = useState(false);
 
-  // Deixei essa função genérica, pois terá que ser utilizada na page FoodsInProgress, e a passei para o arquivo das funções Helpers;
-  // com o nome de checkFoodIsFavorited;
-  // const getFavStorage = () => {
-  //   const res = localStorage.getItem('favoriteRecipes');
-  // const array = JSON.parse(res);
-  //   if (array !== null) {
-  //     const check = array.some(({ id: idMeal }) => idMeal === id);
-  //     if (check) {
-  //       setIsFavorited(true);
-  //       setFavoritar(true);
-  //     } else {
-  //       setIsFavorited(false);
-  //       setFavoritar(false);
-  //     }
-  //   }
-  // };
-
-  // Passei essa função direto pro handleClick;
-  // const iniciarReceita = (idMeal) => {
-  //   setInitRecipe(true);
-  //   history.push(`/foods/${idMeal}/in-progress`);
-  // };
-
-  // const fetchInitDrinks = async () => {
-  //   const result = await (await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=')).json();
-  //   result.drinks.length = 6;
-  //   setRecipeDrinks(result.drinks);
-  // };
-
-  // Fiz esta função ocorrer direto no embed do Youtube, no HTML;
-  // const getIdVideo = (array) => {
-  //   const { strYoutube } = array[0];
-  //   const IdYoutube = strYoutube.split('=')[1];
-  //   const result = `https://www.youtube.com/embed/${IdYoutube}`;
-  //   setEmbedYoutube(result);
-  // };
-
-  // const getRecipes = async () => {
-  //   const response = await fetchFoods(`lookup.php?i=${id}`);
-  //   setRecipe(response);
-  //   const res = getIngredients(response);
-  //   setIngredients(res);
-  //   getIdVideo(response);
-  // };
-
   const responsive = {
     superLargeDesktop: {
       // the naming can be any, depends on you.
@@ -97,8 +52,6 @@ function FoodRecipe() {
     return !isFavorited ? saveFoodFavStorage(foodRecipe) : removeFavStorageFood(id);
   };
 
-  // Vi alguns vídeos sobre boas práticas do useEffect e constatei que o melhor é separar cada useEffect para uma função única;
-  // Refatorei esta parte para o nosso código ficar mais agradável para a leitura;
   useEffect(() => {
     const setRecipeEffect = async () => {
       setFoodRecipe(await fetchFoods(`lookup.php?i=${id}`));
@@ -132,20 +85,6 @@ function FoodRecipe() {
     setIsFavoritedEffect();
   }, []);
 
-  // Refatorei esta função, para passar a utilizar um handleClick no botão de favoritar;
-  // useEffect(() => {
-  //   if (countFav !== 0) {
-  //     console.log(countFav);
-  //     if (favoritar) {
-  //       saveFoodFavStorage(recipe);
-  //       setIsFavorited(true);
-  //     } else {
-  //       removeFavStorageFood(id);
-  //       setIsFavorited(false);
-  //     }
-  //   }
-  // }, [favoritar]);
-
   return (
     <>
       {foodRecipe.map(
@@ -177,7 +116,7 @@ function FoodRecipe() {
               type="image"
               src={ isFavorited ? blackHeartIcon : whiteHeartIcon }
               alt="favoriteRecipe"
-              onClick={ handleClick }
+              onClick={ () => handleClick() }
             />
             <h3 data-testid="recipe-category">{strCategory}</h3>
             <h2 data-testid="recipe-title">{strMeal}</h2>
