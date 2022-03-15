@@ -4,15 +4,6 @@ import PropTypes from 'prop-types';
 function Checkbox({ i, ingredient, measure, handleChange, ingredientValidate }) {
   const [isChecked, setIsChecked] = useState(ingredientValidate.includes(ingredient));
 
-  // useEffect(() => {
-  // if (ingredientValidate !== undefined) {
-  //     const isCheckedEffect = () => (ingredientValidate.includes(ingredient)
-  //       ? setIsChecked(true)
-  //       : setIsChecked(false));
-  //     isCheckedEffect();
-  //   }
-  // }, []);
-
   return (
     <label
       htmlFor={ i }
