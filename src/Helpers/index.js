@@ -128,6 +128,5 @@ export const saveProgress = (id, ingredient) => {
       [id]: [...ingredient, ingredient],
     },
   };
-  console.log(obj);
   return obj;
 };

@@ -12,7 +12,6 @@ function ExploreDrinks() {
   const redirectDrinkdAleatorio = async () => {
     const res = await fetchDrinks('random.php', 1);
     const { idDrink } = res[0];
-    console.log(idDrink);
     history.push(`/drinks/${idDrink}`);
   };
 
