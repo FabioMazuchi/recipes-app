@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { fetchFoods } from '../Services';
-import { getIngredients } from '../Helpers';
+import { getIngredients, saveFoodProgress, checkFoodIsFavorited,
+  saveFoodFavStorage, removeFavStorageFood } from '../Helpers';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import MyContext from '../MyContext/MyContext';
@@ -9,14 +10,30 @@ import Checkbox from '../Components/Checkbox';
 
 function FoodsInProgress() {
   const { store: { isFavorited,
+    setIsFavorited,
     setFoodRecipe,
     setFoodIngredients,
     foodRecipe,
-    foodIngredients } } = useContext(MyContext);
+    foodIngredients,
+  } } = useContext(MyContext);
   const { id } = useParams();
-  const { pathname } = useLocation();
-  // console.log(pathname.split('/')[2]);
   const [showLinkCopied, setShowLinkCopied] = useState(false);
+  const [ingredientValidate, setIngredientValidate] = useState([]);
+  let ingredientArray = [];
+
+  const handleClick = () => {
+    setIsFavorited(!isFavorited);
+    return !isFavorited ? saveFoodFavStorage(foodRecipe) : removeFavStorageFood(id);
+  };
+
+  const handleChange = (isChecked, ingredient) => {
+    if (isChecked) {
+      ingredientArray.push(ingredient);
+    } else {
+      ingredientArray = ingredientArray.filter((f) => f !== ingredient);
+    }
+    saveFoodProgress(ingredientArray, id);
+  };
 
   useEffect(() => {
     const setFoodAndIngredientsEffect = async () => {
@@ -27,6 +44,25 @@ function FoodsInProgress() {
       }
     };
     setFoodAndIngredientsEffect();
+  }, []);
+
+  useEffect(() => {
+    const ingredientArrayEffect = () => {
+      const res = JSON.parse(localStorage.getItem('inProgressRecipes'));
+      if (res !== null) {
+        ingredientArray = res.meals[id];
+        setIngredientValidate(res.meals[id]);
+      }
+    };
+    ingredientArrayEffect();
+  }, []);
+
+  useEffect(() => {
+    const setIsFavoritedEffect = () => {
+      const check = checkFoodIsFavorited(id);
+      setIsFavorited(check);
+    };
+    setIsFavoritedEffect();
   }, []);
 
   return (
@@ -43,7 +79,7 @@ function FoodsInProgress() {
             <button
               data-testid="share-btn"
               type="button"
-              value={ `http://localhost:3000${pathname}` }
+              value={ `http://localhost:3000/foods/${id}` }
               // Source: https://stackoverflow.com/questions/39501289/in-reactjs-how-to-copy-text-to-clipboard
               onClick={ ({ target }) => {
                 navigator.clipboard.writeText(target.value);
@@ -59,7 +95,7 @@ function FoodsInProgress() {
               type="image"
               src={ isFavorited ? blackHeartIcon : whiteHeartIcon }
               alt="favoriteRecipe"
-              onClick={ () => favoritarReceita() }
+              onClick={ () => handleClick() }
             />
             <h3 data-testid="recipe-category">{strCategory}</h3>
             <h2 data-testid="recipe-title">{strMeal}</h2>
@@ -70,7 +106,10 @@ function FoodsInProgress() {
                 key={ i }
                 ingredient={ ingredient }
                 measure={ measure }
-                name={ i }
+                id={ id }
+                handleChange={ handleChange }
+                ingredientValidate={ ingredientValidate }
+                i={ i }
               />
             ))}
             <h3>Modo de preparo:</h3>

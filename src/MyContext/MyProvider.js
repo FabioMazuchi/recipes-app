@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { saveProgress } from '../Helpers';
 import MyContext from './MyContext';
 
 function MyProvider({ children }) {
@@ -12,6 +13,21 @@ function MyProvider({ children }) {
   const [foodIngredients, setFoodIngredients] = useState([]);
   const [drinkIngredients, setDrinkIngredients] = useState([]);
   const [initRecipe, setInitRecipe] = useState(false);
+  const [meals, setMeals] = useState({});
+  const [cocktails, setCocktails] = useState({});
+
+  // useEffect(() => {
+  //   const progressObj = {
+  //     meals,
+  //     cocktails,
+  //   };
+  //   console.log(progressObj);
+  //   localStorage.setItem('inProgressRecipes',
+  //     JSON.stringify({ meals: {}, cocktails: {} }));
+  //   if (progressObj.cocktails.length > 0 || progressObj.meals.length > 0) {
+  //     saveProgress(progressObj);
+  //   }
+  // }, [meals, cocktails]);
 
   const store = {
     data,
@@ -32,6 +48,10 @@ function MyProvider({ children }) {
     setDrinkIngredients,
     initRecipe,
     setInitRecipe,
+    meals,
+    setMeals,
+    cocktails,
+    setCocktails,
   };
   return (
     <main>

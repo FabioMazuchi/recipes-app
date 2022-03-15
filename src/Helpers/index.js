@@ -113,21 +113,55 @@ export const removeFavStorageDrink = (id) => {
   }
 };
 
-// const createRecipeObject = (id, ingredientList) => {
-//   const obj = {
-//     meals: {
-//       id: [...ingredientList],
-//     },
-//   };
-//   return obj;
-// };
-
-export const saveProgress = (id, ingredient) => {
-  const obj = {
+export const saveFoodProgress = (ingredientArray, id) => {
+  const res = JSON.parse(localStorage.getItem('inProgressRecipes'));
+  const fakeObj = {
     meals: {
-      [id]: [...ingredient, ingredient],
+      [id]: ingredientArray,
+    },
+    cocktails: {},
+  };
+  if (res !== null) {
+    const { meals, cocktails } = res;
+    const obj = {
+      meals: {
+        ...meals,
+        [id]: ingredientArray,
+      },
+      cocktails: {
+        ...cocktails,
+      },
+    };
+    localStorage.setItem('inProgressRecipes', JSON.stringify(obj));
+  } else {
+    localStorage.setItem('inProgressRecipes', JSON.stringify(fakeObj));
+    saveFoodProgress();
+  }
+};
+
+export const saveDrinkProgress = (ingredientArray, id) => {
+  const res = JSON.parse(localStorage.getItem('inProgressRecipes'));
+  const fakeObj = {
+    meals: {
+    },
+    cocktails: {
+      [id]: ingredientArray,
     },
   };
-  console.log(obj);
-  return obj;
+  if (res !== null) {
+    const { meals, cocktails } = res;
+    const obj = {
+      meals: {
+        ...meals,
+      },
+      cocktails: {
+        ...cocktails,
+        [id]: ingredientArray,
+      },
+    };
+    localStorage.setItem('inProgressRecipes', JSON.stringify(obj));
+  } else {
+    localStorage.setItem('inProgressRecipes', JSON.stringify(fakeObj));
+    saveDrinkProgress();
+  }
 };

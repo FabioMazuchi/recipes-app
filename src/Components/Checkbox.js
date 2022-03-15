@@ -1,17 +1,24 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-// import { saveProgress } from '../Helpers';
 
-function Checkbox({ i, ingredient, measure }) {
-  const [isChecked, setIsChecked] = useState(false);
+function Checkbox({ i, ingredient, measure, handleChange, ingredientValidate }) {
+  const [isChecked, setIsChecked] = useState(ingredientValidate.includes(ingredient));
+
+  // useEffect(() => {
+  // if (ingredientValidate !== undefined) {
+  //     const isCheckedEffect = () => (ingredientValidate.includes(ingredient)
+  //       ? setIsChecked(true)
+  //       : setIsChecked(false));
+  //     isCheckedEffect();
+  //   }
+  // }, []);
 
   return (
     <label
       htmlFor={ i }
-      data-testid="ingredient-step"
+      data-testid={ `${i}-ingredient-step` }
       style={ isChecked ? { textDecoration: 'none solid rgb(0, 0, 0)' }
         : { backgroundColor: 'red' } }
-
     >
       <input
         type="checkbox"
@@ -19,6 +26,7 @@ function Checkbox({ i, ingredient, measure }) {
         name={ i }
         onChange={ () => {
           setIsChecked(!isChecked);
+          handleChange(!isChecked, ingredient);
         } }
         checked={ isChecked }
       />
@@ -29,10 +37,10 @@ function Checkbox({ i, ingredient, measure }) {
 
 Checkbox.propTypes = {
   i: PropTypes.string.isRequired,
-  // id: PropTypes.string.isRequired,
   ingredient: PropTypes.string.isRequired,
   measure: PropTypes.string.isRequired,
-  // onChange: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  ingredientValidate: PropTypes.arrayOf(PropTypes.any).isRequired,
 };
 
 export default Checkbox;
