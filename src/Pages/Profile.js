@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Footer from '../Components/Footer';
 import Header from '../Components/Header';
@@ -7,11 +7,22 @@ import MyContext from '../MyContext/MyContext';
 function Profile() {
   const { store: { setPageTitle, setShowSearchIcon } } = useContext(MyContext);
   const history = useHistory();
-  const { email } = JSON.parse(localStorage.getItem('user'));
+  const [email, setEmail] = useState();
+
+  const getEmail = () => {
+    const res = JSON.parse(localStorage.getItem('user'));
+    if (res !== null) {
+      setEmail(res.email);
+    }
+  };
 
   useEffect(() => {
     setPageTitle('Profile');
     setShowSearchIcon(false);
+  }, []);
+
+  useEffect(() => {
+    getEmail();
   }, []);
 
   return (
