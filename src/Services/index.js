@@ -23,24 +23,3 @@ export const fetchFoodArea = async () => {
   const data = await (await fetch(`${URL_FOOD}list.php?a=list`)).json();
   return data.meals;
 };
-
-// export const getArrayFilterPais = async (pais) => {
-//   const filterpais = await fetchFoods(`filter.php?a=${pais}`);
-//   return filterpais;
-// };
-
-// export const fetchGeralPaises = async (array) => {
-//   const results = [];
-//   const final = array.reduce((async (acc, { strArea }) => {
-//     // const res = await getArrayFilterPais(strArea);
-//     const obj = { name: '' };
-//     obj.name = strArea;
-//     // obj.filtro = await res;
-//     acc.push(obj);
-//     return acc;
-//   }), []);
-//   const fim = await final;
-//   console.log('fim', fim);
-//   console.log('results', results);
-//   return results;
-// };

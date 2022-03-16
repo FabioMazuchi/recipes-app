@@ -11,22 +11,18 @@ function ExploreFoodsNationalities() {
   } = useContext(MyContext);
   const [nacionalidades, setNacionalidades] = useState();
   const [pais, setPais] = useState('All');
-  // const [paises, setPaises] = useState([]);
-  // const [allPaises, setAllPaises] = useState([]);
   const history = useHistory();
   const MAX_LENGTH = 12;
 
   const fetchInitFoods = async () => {
     const result = await fetchFoods('search.php?s=');
     setData(result.slice(0, MAX_LENGTH));
-    // setAllPaises(result.slice(0, MAX_LENGTH));
   };
 
   const handlePais = async (target) => {
     if (target === 'All') {
       fetchInitFoods();
     } else {
-      // const filterpais = await fetchFoods(`filter.php?a=${pais}`);
       setData(await fetchFoods(`filter.php?a=${target}`, MAX_LENGTH));
     }
     setPais(target);
