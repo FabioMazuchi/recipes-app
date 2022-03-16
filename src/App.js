@@ -18,7 +18,7 @@ import DoneRecipes from './Pages/DoneRecipes';
 import FavoriteRecipes from './Pages/FavoriteRecipes';
 import DrinksInProgress from './Pages/DrinksInProgress';
 import FoodsInProgress from './Pages/FoodsInProgress';
-// import NotFound from './Pages/NotFound';
+import NotFound from './Pages/NotFound';
 
 function App() {
   return (
@@ -44,11 +44,11 @@ function App() {
             path="/explore/foods/nationalities"
             component={ ExploreFoodsNationalities }
           />
-          {/* <Route
+          <Route
             exact
             path="/explore/drinks/nationalities"
             component={ NotFound }
-          /> */}
+          />
           <Route exact path="/explore/drinks" component={ ExploreDrinks } />
           <Route
             exact
