@@ -1,8 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { fetchDrinks } from '../Services';
-import { getIngredients, saveDrinkProgress, checkDrinkIsFavorited,
-  saveDrinkFavStorage, removeFavStorageDrink } from '../Helpers';
+import { getIngredients,
+  saveDrinkProgress,
+  checkDrinkIsFavorited,
+  saveDrinkFavStorage,
+  removeFavStorageDrink,
+  validateFinishButton } from '../Helpers';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import MyContext from '../MyContext/MyContext';
@@ -17,8 +21,10 @@ function DrinksInProgress() {
     drinkIngredients,
   } } = useContext(MyContext);
   const { id } = useParams();
+  const history = useHistory();
   const [showLinkCopied, setShowLinkCopied] = useState(false);
   const [ingredientValidate, setIngredientValidate] = useState([]);
+  const [isDisabled, setIsDisabled] = useState(true);
   let ingredientArray = [];
 
   const handleClick = () => {
@@ -33,6 +39,7 @@ function DrinksInProgress() {
       ingredientArray = ingredientArray.filter((f) => f !== ingredient);
     }
     saveDrinkProgress(ingredientArray, id);
+    setIsDisabled(!validateFinishButton(ingredientArray, drinkIngredients));
   };
 
   useEffect(() => {
@@ -47,14 +54,16 @@ function DrinksInProgress() {
   }, []);
 
   useEffect(() => {
-    const ingredientArrayEffect = () => {
+    const ingredientValidateEffect = () => {
       const res = JSON.parse(localStorage.getItem('inProgressRecipes'));
       if (res !== null) {
         ingredientArray = res.cocktails[id];
         setIngredientValidate(res.cocktails[id]);
+      } else {
+        saveDrinkProgress([], id);
       }
     };
-    ingredientArrayEffect();
+    ingredientValidateEffect();
   }, []);
 
   useEffect(() => {
@@ -120,6 +129,8 @@ function DrinksInProgress() {
       <button
         data-testid="finish-recipe-btn"
         type="button"
+        disabled={ isDisabled }
+        onClick={ () => history.push('/done-recipes') }
       >
         Finalizar Receita
       </button>

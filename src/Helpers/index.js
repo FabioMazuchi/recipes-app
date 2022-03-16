@@ -165,3 +165,6 @@ export const saveDrinkProgress = (ingredientArray, id) => {
     saveDrinkProgress();
   }
 };
+
+export const validateFinishButton = (ingredientArray, allIngredients) => (
+  ingredientArray.length === allIngredients.length);

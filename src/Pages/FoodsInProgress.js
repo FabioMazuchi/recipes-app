@@ -1,12 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { fetchFoods } from '../Services';
-import { getIngredients, saveFoodProgress, checkFoodIsFavorited,
-  saveFoodFavStorage, removeFavStorageFood } from '../Helpers';
+import { getIngredients,
+  saveFoodProgress,
+  checkFoodIsFavorited,
+  saveFoodFavStorage,
+  removeFavStorageFood,
+  validateFinishButton } from '../Helpers';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import MyContext from '../MyContext/MyContext';
 import Checkbox from '../Components/Checkbox';
+
+// Finalizado até o req 53;
+// Caçar dois bugs:
+// Um que faz a aplicação quebrar porque o includes da checkbox dá undefined;
+// Outro que faz com que o localStorage apague toda a array de checados quando da f5 na página;
 
 function FoodsInProgress() {
   const { store: { isFavorited,
@@ -17,8 +26,10 @@ function FoodsInProgress() {
     foodIngredients,
   } } = useContext(MyContext);
   const { id } = useParams();
+  const history = useHistory();
   const [showLinkCopied, setShowLinkCopied] = useState(false);
   const [ingredientValidate, setIngredientValidate] = useState([]);
+  const [isDisabled, setIsDisabled] = useState(true);
   let ingredientArray = [];
 
   const handleClick = () => {
@@ -33,6 +44,7 @@ function FoodsInProgress() {
       ingredientArray = ingredientArray.filter((f) => f !== ingredient);
     }
     saveFoodProgress(ingredientArray, id);
+    setIsDisabled(!validateFinishButton(ingredientArray, foodIngredients));
   };
 
   useEffect(() => {
@@ -47,14 +59,16 @@ function FoodsInProgress() {
   }, []);
 
   useEffect(() => {
-    const ingredientArrayEffect = () => {
+    const ingredientValidateEffect = () => {
       const res = JSON.parse(localStorage.getItem('inProgressRecipes'));
       if (res !== null) {
-        ingredientArray = res.meals[id];
+        // ingredientArray = res.meals[id];
         setIngredientValidate(res.meals[id]);
+      } else {
+        saveFoodProgress([], id);
       }
     };
-    ingredientArrayEffect();
+    ingredientValidateEffect();
   }, []);
 
   useEffect(() => {
@@ -120,6 +134,8 @@ function FoodsInProgress() {
       <button
         data-testid="finish-recipe-btn"
         type="button"
+        disabled={ isDisabled }
+        onClick={ () => history.push('/done-recipes') }
       >
         Finalizar Receita
       </button>
