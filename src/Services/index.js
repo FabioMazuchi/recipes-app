@@ -18,3 +18,8 @@ export const fetchDrinks = async (endpoint, comparison) => {
   const data = await (await fetch(`${URL_DRINK}${endpoint}`)).json();
   return data.drinks.slice(0, MAX_LENGTH);
 };
+
+export const fetchFoodArea = async () => {
+  const data = await (await fetch(`${URL_FOOD}list.php?a=list`)).json();
+  return data.meals;
+};

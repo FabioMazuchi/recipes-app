@@ -15,7 +15,6 @@ function FoodsInProgress() {
     foodIngredients } } = useContext(MyContext);
   const { id } = useParams();
   const { pathname } = useLocation();
-  // console.log(pathname.split('/')[2]);
   const [showLinkCopied, setShowLinkCopied] = useState(false);
 
   useEffect(() => {
