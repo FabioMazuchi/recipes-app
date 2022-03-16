@@ -10,18 +10,32 @@ function ExploreFoodsNationalities() {
     store: { setPageTitle, setShowSearchIcon, data, setData },
   } = useContext(MyContext);
   const [nacionalidades, setNacionalidades] = useState();
+  const [pais, setPais] = useState('All');
+  // const [paises, setPaises] = useState([]);
+  // const [allPaises, setAllPaises] = useState([]);
   const history = useHistory();
+  const MAX_LENGTH = 12;
 
   const fetchInitFoods = async () => {
-    const MAX_LENGTH = 12;
-    const result = await (await fetchFoods('search.php?s='));
+    const result = await fetchFoods('search.php?s=');
     setData(result.slice(0, MAX_LENGTH));
+    // setAllPaises(result.slice(0, MAX_LENGTH));
+  };
+
+  const handlePais = async (target) => {
+    if (target === 'All') {
+      fetchInitFoods();
+    } else {
+      // const filterpais = await fetchFoods(`filter.php?a=${pais}`);
+      setData(await fetchFoods(`filter.php?a=${target}`, MAX_LENGTH));
+    }
+    setPais(target);
+    console.log(pais);
   };
 
   const fetchNacionalidade = async () => {
     const res = await fetchFoodArea();
     setNacionalidades(res);
-    console.log(data);
   };
 
   useEffect(() => {
@@ -45,9 +59,11 @@ function ExploreFoodsNationalities() {
           <label htmlFor="nacionalidade">
             Filtrar por nacionalidade:
             <select
+              onChange={ ({ target }) => handlePais(target.value) }
               data-testid="explore-by-nationality-dropdown"
               id="nacionalidade"
             >
+              <option data-testid="All-option">All</option>
               {nacionalidades.map(({ strArea }) => (
                 <option data-testid={ `${strArea}-option` } key={ strArea }>
                   {strArea}
