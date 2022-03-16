@@ -6,7 +6,8 @@ import { getIngredients,
   checkDrinkIsFavorited,
   saveDrinkFavStorage,
   removeFavStorageDrink,
-  validateFinishButton } from '../Helpers';
+  validateFinishButton,
+  saveDoneRecipe } from '../Helpers';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import MyContext from '../MyContext/MyContext';
@@ -130,7 +131,10 @@ function DrinksInProgress() {
         data-testid="finish-recipe-btn"
         type="button"
         disabled={ isDisabled }
-        onClick={ () => history.push('/done-recipes') }
+        onClick={ () => {
+          saveDoneRecipe(drinkRecipe);
+          history.push('/done-recipes');
+        } }
       >
         Finalizar Receita
       </button>

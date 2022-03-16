@@ -54,6 +54,58 @@ export const returnObjFood = (obj) => {
   return object;
 };
 
+export const objFoodDone = (recipe, doneDate) => {
+  const { idMeal, strArea, strCategory, strMeal, strMealThumb, strTags } = recipe[0];
+  const object = {
+    id: idMeal,
+    type: 'food',
+    nationality: strArea,
+    category: strCategory,
+    alcoholicOrNot: '',
+    name: strMeal,
+    image: strMealThumb,
+    doneDate,
+    tags: [strTags],
+  };
+  return object;
+};
+
+const objDrinkDone = (recipe, doneDate) => {
+  const { idDrink, strArea, strCategory, strDrink, strDrinkThumb, strTags } = recipe[0];
+  const object = {
+    id: idDrink,
+    type: 'drink',
+    nationality: strArea,
+    category: strCategory,
+    alcoholicOrNot: '',
+    name: strDrink,
+    image: strDrinkThumb,
+    doneDate,
+    tags: [strTags],
+  };
+  return object;
+};
+
+export const saveDoneRecipe = (recipe) => {
+  console.log(recipe);
+  const foodOrDrink = (Object.keys(recipe[0]).includes('strMeal')
+    ? objFoodDone : objDrinkDone);
+  const array = [];
+  let doneDate = new Date();
+  doneDate = (`${doneDate.getDate()}/
+  ${(doneDate.getMonth() + 1)}/${doneDate.getFullYear()}`);
+  const obj = foodOrDrink(recipe, doneDate);
+  const res = JSON.parse(localStorage.getItem('doneRecipes'));
+  if (res === null) {
+    array.push(obj);
+    localStorage.setItem('doneRecipes', JSON.stringify(array));
+  } else {
+    res.push(obj);
+    localStorage.setItem('doneRecipes', JSON.stringify(res));
+  }
+  console.log(obj);
+};
+
 export const saveFoodFavStorage = (obj) => {
   const fav = returnObjFood(obj);
   const array = [];

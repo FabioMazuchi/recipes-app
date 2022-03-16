@@ -6,7 +6,8 @@ import { getIngredients,
   checkFoodIsFavorited,
   saveFoodFavStorage,
   removeFavStorageFood,
-  validateFinishButton } from '../Helpers';
+  validateFinishButton,
+  saveDoneRecipe } from '../Helpers';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import MyContext from '../MyContext/MyContext';
@@ -135,7 +136,10 @@ function FoodsInProgress() {
         data-testid="finish-recipe-btn"
         type="button"
         disabled={ isDisabled }
-        onClick={ () => history.push('/done-recipes') }
+        onClick={ () => {
+          saveDoneRecipe(foodRecipe);
+          history.push('/done-recipes');
+        } }
       >
         Finalizar Receita
       </button>

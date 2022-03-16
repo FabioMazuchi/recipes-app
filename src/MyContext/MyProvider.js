@@ -15,19 +15,6 @@ function MyProvider({ children }) {
   const [meals, setMeals] = useState({});
   const [cocktails, setCocktails] = useState({});
 
-  // useEffect(() => {
-  //   const progressObj = {
-  //     meals,
-  //     cocktails,
-  //   };
-  //   console.log(progressObj);
-  //   localStorage.setItem('inProgressRecipes',
-  //     JSON.stringify({ meals: {}, cocktails: {} }));
-  //   if (progressObj.cocktails.length > 0 || progressObj.meals.length > 0) {
-  //     saveProgress(progressObj);
-  //   }
-  // }, [meals, cocktails]);
-
   const store = {
     data,
     setData,
