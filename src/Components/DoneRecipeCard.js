@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import shareIcon from '../images/shareIcon.svg';
 
@@ -12,27 +13,33 @@ function DoneRecipeCard({ index,
   nationality,
   tags,
   type }) {
-  const validate = (alcoholicOrNot === '');
+  const validate = (type === 'food');
   const foodOrDrink = (validate ? 'foods' : 'drinks');
   const [showLinkCopied, setShowLinkCopied] = useState(false);
+  const history = useHistory();
 
   return (
     <div>
-      <img
-        src={ image }
-        data-testid={ `${index}-horizontal-image` }
-        alt="foto-da-receita"
-      />
-      <p
-        data-testid={ `${index}-horizontal-top-text` }
-      >
-        {validate ? (`${nationality} - ${category}`) : alcoholicOrNot}
-      </p>
-      <p
-        data-testid={ `${index}-horizontal-name` }
-      >
-        {name}
-      </p>
+      <Link to={ `/${foodOrDrink}/${id}` }>
+        <input
+          style={ { width: '300px' } }
+          type="image"
+          src={ image }
+          data-testid={ `${index}-horizontal-image` }
+          alt="foto-da-receita"
+          onClick={ () => history.push(`/${foodOrDrink}/${id}`) }
+        />
+        <p
+          data-testid={ `${index}-horizontal-top-text` }
+        >
+          {validate ? (`${nationality} - ${category}`) : alcoholicOrNot}
+        </p>
+        <p
+          data-testid={ `${index}-horizontal-name` }
+        >
+          {name}
+        </p>
+      </Link>
       <p
         data-testid={ `${index}-horizontal-done-date` }
       >

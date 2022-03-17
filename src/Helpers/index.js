@@ -87,13 +87,10 @@ const objDrinkDone = (recipe, doneDate) => {
 };
 
 export const saveDoneRecipe = (recipe) => {
-  console.log(recipe);
   const foodOrDrink = (Object.keys(recipe[0]).includes('strMeal')
     ? objFoodDone : objDrinkDone);
   const array = [];
-  let doneDate = new Date();
-  doneDate = (`${doneDate.getDate()}/
-  ${(doneDate.getMonth() + 1)}/${doneDate.getFullYear()}`);
+  const doneDate = new Date().toLocaleDateString();
   const obj = foodOrDrink(recipe, doneDate);
   const res = JSON.parse(localStorage.getItem('doneRecipes'));
   if (res === null) {
@@ -103,7 +100,6 @@ export const saveDoneRecipe = (recipe) => {
     res.push(obj);
     localStorage.setItem('doneRecipes', JSON.stringify(res));
   }
-  console.log(obj);
 };
 
 export const saveFoodFavStorage = (obj) => {
