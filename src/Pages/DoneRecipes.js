@@ -60,7 +60,7 @@ function DoneRecipes() {
             nationality={ nationality }
             tags={ tags }
             type={ type }
-            onClick={ () => console.log('xablau') }
+            showTagAndDoneDate
           />)
         ))}
     </>

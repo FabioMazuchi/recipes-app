@@ -29,7 +29,6 @@ function FoodsInProgress() {
   const { id } = useParams();
   const history = useHistory();
   const [showLinkCopied, setShowLinkCopied] = useState(false);
-  const [ingredientValidate, setIngredientValidate] = useState([]);
   const [isDisabled, setIsDisabled] = useState(true);
   let ingredientArray = [];
 
@@ -57,19 +56,6 @@ function FoodsInProgress() {
       }
     };
     setFoodAndIngredientsEffect();
-  }, []);
-
-  useEffect(() => {
-    const ingredientValidateEffect = () => {
-      const res = JSON.parse(localStorage.getItem('inProgressRecipes'));
-      if (res !== null) {
-        // ingredientArray = res.meals[id];
-        setIngredientValidate(res.meals[id]);
-      } else {
-        saveFoodProgress([], id);
-      }
-    };
-    ingredientValidateEffect();
   }, []);
 
   useEffect(() => {
@@ -123,8 +109,8 @@ function FoodsInProgress() {
                 measure={ measure }
                 id={ id }
                 handleChange={ handleChange }
-                ingredientValidate={ ingredientValidate }
                 i={ i }
+                type="meals"
               />
             ))}
             <h3>Modo de preparo:</h3>

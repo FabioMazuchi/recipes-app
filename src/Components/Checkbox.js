@@ -1,8 +1,21 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { saveFoodProgress, saveDrinkProgress } from '../Helpers';
 
-function Checkbox({ i, ingredient, measure, handleChange, ingredientValidate }) {
-  const [isChecked, setIsChecked] = useState(ingredientValidate.includes(ingredient));
+function Checkbox({ i, ingredient, measure, handleChange, id, type }) {
+  const validateStorage = () => {
+    let res = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    if (res === null || res[type][id] === undefined) {
+      if (type === 'meals') {
+        saveFoodProgress([], id);
+      } else {
+        saveDrinkProgress([], id);
+      }
+    }
+    res = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    return res[type][id].includes(ingredient);
+  };
+  const [isChecked, setIsChecked] = useState(validateStorage());
 
   return (
     <label
@@ -31,7 +44,8 @@ Checkbox.propTypes = {
   ingredient: PropTypes.string.isRequired,
   measure: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
-  ingredientValidate: PropTypes.arrayOf(PropTypes.any).isRequired,
+  id: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
 };
 
 export default Checkbox;

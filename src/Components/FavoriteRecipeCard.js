@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import shareIcon from '../images/shareIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 
-function DoneRecipeCard({ index,
+function FavoriteRecipeCard({ index,
   alcoholicOrNot,
   category,
   doneDate,
@@ -11,16 +12,24 @@ function DoneRecipeCard({ index,
   image,
   name,
   nationality,
-  tags,
   type,
+  handleClick,
 }) {
   const validate = (type === 'food');
   const foodOrDrink = (validate ? 'foods' : 'drinks');
   const [showLinkCopied, setShowLinkCopied] = useState(false);
   const history = useHistory();
-
   return (
     <div>
+      <label htmlFor="favorite-btn">
+        <input
+          data-testid={ `${index}-horizontal-favorite-btn` }
+          type="image"
+          src={ blackHeartIcon }
+          alt="botao-favoritado"
+          onClick={ () => handleClick(id, type) }
+        />
+      </label>
       <Link to={ `/${foodOrDrink}/${id}` }>
         <input
           style={ { width: '300px' } }
@@ -61,19 +70,11 @@ function DoneRecipeCard({ index,
         />
       </label>
       {showLinkCopied && <p>Link copied!</p>}
-      { tags.map((tag) => (
-        <span
-          key={ index }
-          data-testid={ `${index}-${tag}-horizontal-tag` }
-        >
-          {tag}
-        </span>
-      ))}
     </div>
   );
 }
 
-DoneRecipeCard.propTypes = {
+FavoriteRecipeCard.propTypes = {
   index: PropTypes.number.isRequired,
   alcoholicOrNot: PropTypes.string.isRequired,
   category: PropTypes.string.isRequired,
@@ -82,8 +83,8 @@ DoneRecipeCard.propTypes = {
   image: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   nationality: PropTypes.string.isRequired,
-  tags: PropTypes.arrayOf(PropTypes.any).isRequired,
   type: PropTypes.string.isRequired,
+  handleClick: PropTypes.func.isRequired,
 };
 
-export default DoneRecipeCard;
+export default FavoriteRecipeCard;

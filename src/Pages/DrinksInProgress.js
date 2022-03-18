@@ -24,7 +24,6 @@ function DrinksInProgress() {
   const { id } = useParams();
   const history = useHistory();
   const [showLinkCopied, setShowLinkCopied] = useState(false);
-  const [ingredientValidate, setIngredientValidate] = useState([]);
   const [isDisabled, setIsDisabled] = useState(true);
   let ingredientArray = [];
 
@@ -52,19 +51,6 @@ function DrinksInProgress() {
       }
     };
     setDrinkAndIngredientsEffect();
-  }, []);
-
-  useEffect(() => {
-    const ingredientValidateEffect = () => {
-      const res = JSON.parse(localStorage.getItem('inProgressRecipes'));
-      if (res !== null) {
-        ingredientArray = res.cocktails[id];
-        setIngredientValidate(res.cocktails[id]);
-      } else {
-        saveDrinkProgress([], id);
-      }
-    };
-    ingredientValidateEffect();
   }, []);
 
   useEffect(() => {
@@ -118,8 +104,8 @@ function DrinksInProgress() {
                 measure={ measure }
                 handleChange={ handleChange }
                 type="cocktails"
-                ingredientValidate={ ingredientValidate }
                 i={ i }
+                id={ id }
               />
             ))}
             <h3>Modo de preparo:</h3>
