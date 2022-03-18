@@ -12,6 +12,8 @@ function MyProvider({ children }) {
   const [foodIngredients, setFoodIngredients] = useState([]);
   const [drinkIngredients, setDrinkIngredients] = useState([]);
   const [initRecipe, setInitRecipe] = useState(false);
+  const [meals, setMeals] = useState({});
+  const [cocktails, setCocktails] = useState({});
 
   const store = {
     data,
@@ -32,6 +34,10 @@ function MyProvider({ children }) {
     setDrinkIngredients,
     initRecipe,
     setInitRecipe,
+    meals,
+    setMeals,
+    cocktails,
+    setCocktails,
   };
   return (
     <main>

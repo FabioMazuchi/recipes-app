@@ -54,6 +54,54 @@ export const returnObjFood = (obj) => {
   return object;
 };
 
+export const objFoodDone = (recipe, doneDate) => {
+  const { idMeal, strArea, strCategory, strMeal, strMealThumb, strTags } = recipe[0];
+  const object = {
+    id: idMeal,
+    type: 'food',
+    nationality: strArea,
+    category: strCategory,
+    alcoholicOrNot: '',
+    name: strMeal,
+    image: strMealThumb,
+    doneDate,
+    tags: [strTags],
+  };
+  return object;
+};
+
+const objDrinkDone = (recipe, doneDate) => {
+  const { idDrink, strArea, strCategory, strDrink, strDrinkThumb, strTags } = recipe[0];
+  const object = {
+    id: idDrink,
+    type: 'drink',
+    nationality: strArea,
+    category: strCategory,
+    alcoholicOrNot: '',
+    name: strDrink,
+    image: strDrinkThumb,
+    doneDate,
+    tags: [strTags],
+  };
+  return object;
+};
+
+export const saveDoneRecipe = (recipe) => {
+  const foodOrDrink = (Object.keys(recipe[0]).includes('strMeal')
+    ? objFoodDone : objDrinkDone);
+  const array = [];
+  const doneDate = new Date().toLocaleDateString();
+  const obj = foodOrDrink(recipe, doneDate);
+  const res = JSON.parse(localStorage.getItem('doneRecipes'));
+  if (res === null) {
+    array.push(obj);
+    localStorage.setItem('doneRecipes', JSON.stringify(array));
+  } else {
+    res.push(obj);
+    localStorage.setItem('doneRecipes', JSON.stringify(res));
+  }
+};
+
 export const saveFoodFavStorage = (obj) => {
   const fav = returnObjFood(obj);
   const array = [];
@@ -113,20 +161,61 @@ export const removeFavStorageDrink = (id) => {
   }
 };
 
-// const createRecipeObject = (id, ingredientList) => {
-//   const obj = {
-//     meals: {
-//       id: [...ingredientList],
-//     },
-//   };
-//   return obj;
-// };
-
-export const saveProgress = (id, ingredient) => {
-  const obj = {
+export const saveFoodProgress = (ingredientArray, id) => {
+  const res = JSON.parse(localStorage.getItem('inProgressRecipes'));
+  const fakeObj = {
     meals: {
-      [id]: [...ingredient, ingredient],
+      [id]: ingredientArray,
     },
+    cocktails: {},
   };
+  if (res !== null) {
+    const { meals, cocktails } = res;
+    const obj = {
+      meals: {
+        ...meals,
+        [id]: ingredientArray,
+      },
+      cocktails: {
+        ...cocktails,
+      },
+    };
+    localStorage.setItem('inProgressRecipes', JSON.stringify(obj));
+  } else {
+    localStorage.setItem('inProgressRecipes', JSON.stringify(fakeObj));
+    saveFoodProgress();
+  }
   return obj;
 };
+
+export const saveDrinkProgress = (ingredientArray, id) => {
+  const res = JSON.parse(localStorage.getItem('inProgressRecipes'));
+  const fakeObj = {
+    meals: {
+    },
+    cocktails: {
+      [id]: ingredientArray,
+    },
+  };
+  if (res !== null) {
+    const { meals, cocktails } = res;
+    const obj = {
+      meals: {
+        ...meals,
+      },
+      cocktails: {
+        ...cocktails,
+        [id]: ingredientArray,
+      },
+    };
+    localStorage.setItem('inProgressRecipes', JSON.stringify(obj));
+  } else {
+    localStorage.setItem('inProgressRecipes', JSON.stringify(fakeObj));
+    saveDrinkProgress();
+  }
+};
+
+export const validateFinishButton = (ingredientArray, allIngredients) => (
+  ingredientArray.length === allIngredients.length);
+
+export const getLocalStorage = (key) => JSON.parse(localStorage.getItem(key));

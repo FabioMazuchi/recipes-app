@@ -1,21 +1,52 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { fetchFoods } from '../Services';
-import { getIngredients } from '../Helpers';
+import { getIngredients,
+  saveFoodProgress,
+  checkFoodIsFavorited,
+  saveFoodFavStorage,
+  removeFavStorageFood,
+  validateFinishButton,
+  saveDoneRecipe } from '../Helpers';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import MyContext from '../MyContext/MyContext';
 import Checkbox from '../Components/Checkbox';
 
+// Finalizado até o req 53;
+// Caçar dois bugs:
+// Um que faz a aplicação quebrar porque o includes da checkbox dá undefined;
+// Outro que faz com que o localStorage apague toda a array de checados quando da f5 na página;
+
 function FoodsInProgress() {
   const { store: { isFavorited,
+    setIsFavorited,
     setFoodRecipe,
     setFoodIngredients,
     foodRecipe,
-    foodIngredients } } = useContext(MyContext);
+    foodIngredients,
+  } } = useContext(MyContext);
   const { id } = useParams();
+  const history = useHistory();
   const { pathname } = useLocation();
   const [showLinkCopied, setShowLinkCopied] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
+  let ingredientArray = [];
+
+  const handleClick = () => {
+    setIsFavorited(!isFavorited);
+    return !isFavorited ? saveFoodFavStorage(foodRecipe) : removeFavStorageFood(id);
+  };
+
+  const handleChange = (isChecked, ingredient) => {
+    if (isChecked) {
+      ingredientArray.push(ingredient);
+    } else {
+      ingredientArray = ingredientArray.filter((f) => f !== ingredient);
+    }
+    saveFoodProgress(ingredientArray, id);
+    setIsDisabled(!validateFinishButton(ingredientArray, foodIngredients));
+  };
 
   useEffect(() => {
     const setFoodAndIngredientsEffect = async () => {
@@ -26,6 +57,14 @@ function FoodsInProgress() {
       }
     };
     setFoodAndIngredientsEffect();
+  }, []);
+
+  useEffect(() => {
+    const setIsFavoritedEffect = () => {
+      const check = checkFoodIsFavorited(id);
+      setIsFavorited(check);
+    };
+    setIsFavoritedEffect();
   }, []);
 
   return (
@@ -42,7 +81,7 @@ function FoodsInProgress() {
             <button
               data-testid="share-btn"
               type="button"
-              value={ `http://localhost:3000${pathname}` }
+              value={ `http://localhost:3000/foods/${id}` }
               // Source: https://stackoverflow.com/questions/39501289/in-reactjs-how-to-copy-text-to-clipboard
               onClick={ ({ target }) => {
                 navigator.clipboard.writeText(target.value);
@@ -58,7 +97,7 @@ function FoodsInProgress() {
               type="image"
               src={ isFavorited ? blackHeartIcon : whiteHeartIcon }
               alt="favoriteRecipe"
-              onClick={ () => favoritarReceita() }
+              onClick={ () => handleClick() }
             />
             <h3 data-testid="recipe-category">{strCategory}</h3>
             <h2 data-testid="recipe-title">{strMeal}</h2>
@@ -69,7 +108,10 @@ function FoodsInProgress() {
                 key={ i }
                 ingredient={ ingredient }
                 measure={ measure }
-                name={ i }
+                id={ id }
+                handleChange={ handleChange }
+                i={ i }
+                type="meals"
               />
             ))}
             <h3>Modo de preparo:</h3>
@@ -80,6 +122,11 @@ function FoodsInProgress() {
       <button
         data-testid="finish-recipe-btn"
         type="button"
+        disabled={ isDisabled }
+        onClick={ () => {
+          saveDoneRecipe(foodRecipe);
+          history.push('/done-recipes');
+        } }
       >
         Finalizar Receita
       </button>
