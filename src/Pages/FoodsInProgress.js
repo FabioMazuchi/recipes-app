@@ -28,7 +28,6 @@ function FoodsInProgress() {
   } } = useContext(MyContext);
   const { id } = useParams();
   const history = useHistory();
-  const { pathname } = useLocation();
   const [showLinkCopied, setShowLinkCopied] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   let ingredientArray = [];

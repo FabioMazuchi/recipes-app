@@ -8,12 +8,7 @@ function ExploreFoodsIngredients() {
   const {
     store: { setPageTitle, setShowSearchIcon },
   } = useContext(MyContext);
-  const [ingredientes, setIngredientes] = useState([]);
-
-  const requestIngredients = async () => {
-    const res = await fetchFoods('list.php?i=list', 1);
-    setIngredientes(res);
-  };
+  const [ingredients, setIngredients] = useState([]);
 
   useEffect(() => {
     setPageTitle('Explore Ingredients');
@@ -21,13 +16,17 @@ function ExploreFoodsIngredients() {
   }, []);
 
   useEffect(() => {
-    requestIngredients();
+    const setIngredientsEffect = async () => {
+      const res = await fetchFoods('list.php?i=list');
+      setIngredients(res);
+    };
+    setIngredientsEffect();
   }, []);
 
   return (
     <>
       <Header />
-      {ingredientes.map(({ strIngredient }, i) => (
+      {ingredients.map(({ strIngredient }, i) => (
         <div key={ i } data-testid={ `${i}-ingredient-card` }>
           <img
             data-testid={ `${i}-card-img` }
