@@ -1,13 +1,21 @@
 import React, { useContext, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Footer from '../Components/Footer';
 import Header from '../Components/Header';
 import MyContext from '../MyContext/MyContext';
+import { fetchFoods } from '../Services';
 
 function ExploreFoods() {
   const {
     store: { setPageTitle, setShowSearchIcon },
   } = useContext(MyContext);
+  const history = useHistory();
+
+  const redirectFoodAleatorio = async () => {
+    const res = await fetchFoods('random.php', 1);
+    const { idMeal } = res[0];
+    history.push(`/foods/${idMeal}`);
+  };
 
   useEffect(() => {
     setPageTitle('Explore Foods');
@@ -30,12 +38,13 @@ function ExploreFoods() {
         >
           By Nationality
         </Link>
-        <Link
-          to="/explore/foods/nationalities"
+        <button
+          onClick={ () => redirectFoodAleatorio() }
+          type="button"
           data-testid="explore-surprise"
         >
           Surprise me!
-        </Link>
+        </button>
       </nav>
       <Footer />
     </>

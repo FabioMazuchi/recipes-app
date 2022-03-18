@@ -185,6 +185,7 @@ export const saveFoodProgress = (ingredientArray, id) => {
     localStorage.setItem('inProgressRecipes', JSON.stringify(fakeObj));
     saveFoodProgress();
   }
+  return obj;
 };
 
 export const saveDrinkProgress = (ingredientArray, id) => {
