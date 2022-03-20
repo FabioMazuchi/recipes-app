@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { checkEmailSenha } from '../Helpers';
+import logo from '../images/logo.png';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -29,7 +30,8 @@ function Login() {
   }, [email, senha]);
 
   return (
-    <form>
+    <form className="login">
+      <img src={ logo } alt="Rango Recipes" />
       <input
         value={ email }
         data-testid="email-input"
@@ -50,7 +52,7 @@ function Login() {
         data-testid="login-submit-btn"
         type="button"
       >
-        Enter
+        Logar
       </button>
     </form>
   );
