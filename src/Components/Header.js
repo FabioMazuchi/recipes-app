@@ -27,13 +27,14 @@ function Header() {
   };
 
   const searchForm = (
-    <form>
+    <form className="searchForm">
       <input
         type="text"
         name="searchValue"
         value={ searchValue }
         onChange={ ({ target }) => setSearchValue(target.value) }
         data-testid="search-input"
+        placeholder="Digite aqui..."
       />
       <div className="radio">
         <label htmlFor="ingredient">
@@ -91,6 +92,7 @@ function Header() {
         <img src={ profileIcon } alt="profile-icon-svg" />
       </button>
       <button
+        className="pageTitle"
         type="button"
         data-testid="page-title"
       >
