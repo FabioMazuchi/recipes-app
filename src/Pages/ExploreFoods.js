@@ -25,7 +25,7 @@ function ExploreFoods() {
   return (
     <>
       <Header />
-      <nav>
+      <nav className="explore">
         <Link
           to="/explore/foods/ingredients"
           data-testid="explore-by-ingredient"
@@ -39,6 +39,7 @@ function ExploreFoods() {
           By Nationality
         </Link>
         <button
+          className="surpriseMe"
           onClick={ () => redirectFoodAleatorio() }
           type="button"
           data-testid="explore-surprise"

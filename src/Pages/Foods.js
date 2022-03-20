@@ -49,7 +49,7 @@ function Foods() {
   return (
     <>
       <Header />
-      <div className="foodBotoes">
+      <div className="botoes">
         <button
           type="button"
           data-testid="All-category-filter"
@@ -65,7 +65,7 @@ function Foods() {
           />
         ))}
       </div>
-      <main className="mainFood">
+      <main className="mainFoodEDrink">
         <h3>Receitas</h3>
         <section className="all-recipes">
           {data.map((food, index) => (

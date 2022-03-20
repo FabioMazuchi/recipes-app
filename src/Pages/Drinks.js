@@ -49,22 +49,23 @@ function Drinks() {
   return (
     <>
       <Header />
-      <button
-        type="button"
-        data-testid="All-category-filter"
-        onClick={ () => handleSelect('All') }
-      >
-        All
-
-      </button>
-      {drinkCategories.map(({ strCategory }, index) => (
-        <CategoryListButton
-          key={ index }
-          strCategory={ strCategory }
-          onClick={ () => handleSelect(strCategory) }
-        />
-      ))}
-      <main>
+      <div className="botoes">
+        <button
+          type="button"
+          data-testid="All-category-filter"
+          onClick={ () => handleSelect('All') }
+        >
+          All
+        </button>
+        {drinkCategories.map(({ strCategory }, index) => (
+          <CategoryListButton
+            key={ index }
+            strCategory={ strCategory }
+            onClick={ () => handleSelect(strCategory) }
+          />
+        ))}
+      </div>
+      <main className="mainFoodEDrink">
         <h3>Drinks:</h3>
         <section className="all-recipes">
           {data.map((drink, index) => (

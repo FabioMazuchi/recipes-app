@@ -26,16 +26,18 @@ function ExploreFoodsIngredients() {
   return (
     <>
       <Header />
-      {ingredients.map(({ strIngredient }, i) => (
-        <div key={ i } data-testid={ `${i}-ingredient-card` }>
-          <img
-            data-testid={ `${i}-card-img` }
-            alt={ strIngredient }
-            src={ `https://www.themealdb.com/images/ingredients/${strIngredient}-Small.png` }
-          />
-          <p data-testid={ `${i}-card-name` }>{strIngredient}</p>
-        </div>
-      ))}
+      <section className="exploreIngredient">
+        {ingredients.map(({ strIngredient }, i) => (
+          <div key={ i } data-testid={ `${i}-ingredient-card` }>
+            <img
+              data-testid={ `${i}-card-img` }
+              alt={ strIngredient }
+              src={ `https://www.themealdb.com/images/ingredients/${strIngredient}-Small.png` }
+            />
+            <p data-testid={ `${i}-card-name` }>{strIngredient}</p>
+          </div>
+        ))}
+      </section>
       <Footer />
     </>
   );

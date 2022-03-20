@@ -51,37 +51,44 @@ function ExploreFoodsNationalities() {
     <>
       <Header />
       {nacionalidades !== undefined && (
-        <form>
-          <label htmlFor="nacionalidade">
-            Filtrar por nacionalidade:
-            <select
-              onChange={ ({ target }) => handlePais(target.value) }
-              data-testid="explore-by-nationality-dropdown"
-              id="nacionalidade"
-            >
-              <option data-testid="All-option">All</option>
-              {nacionalidades.map(({ strArea }) => (
-                <option data-testid={ `${strArea}-option` } key={ strArea }>
-                  {strArea}
-                </option>
+        <>
+          <form className="nacionalidade">
+            <label htmlFor="nacionalidade">
+              Filtrar por nacionalidade:
+              <select
+                onChange={ ({ target }) => handlePais(target.value) }
+                data-testid="explore-by-nationality-dropdown"
+                id="nacionalidade"
+              >
+                <option data-testid="All-option">All</option>
+                {nacionalidades.map(({ strArea }) => (
+                  <option data-testid={ `${strArea}-option` } key={ strArea }>
+                    {strArea}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </form>
+          <main className="nationalities">
+            <section className="all-recipes">
+              {data.map(({ strMeal, idMeal, strMealThumb }, i) => (
+                <div key={ i } className="card" data-testid={ `${i}-recipe-card` }>
+                  <button
+                    type="button"
+                    onClick={ () => history.push(`/foods/${idMeal}`) }
+                  >
+                    <h4 data-testid={ `${i}-card-name` }>{ strMeal }</h4>
+                    <img
+                      src={ strMealThumb }
+                      alt={ strMeal }
+                      data-testid={ `${i}-card-img` }
+                    />
+                  </button>
+                </div>
               ))}
-            </select>
-          </label>
-          <section className="all-recipes">
-            {data.map(({ strMeal, idMeal, strMealThumb }, i) => (
-              <div key={ i } className="card" data-testid={ `${i}-recipe-card` }>
-                <button type="button" onClick={ () => history.push(`/foods/${idMeal}`) }>
-                  <h4 data-testid={ `${i}-card-name` }>{ strMeal }</h4>
-                  <img
-                    src={ strMealThumb }
-                    alt={ strMeal }
-                    data-testid={ `${i}-card-img` }
-                  />
-                </button>
-              </div>
-            ))}
-          </section>
-        </form>
+            </section>
+          </main>
+        </>
       )}
       <Footer />
     </>

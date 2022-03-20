@@ -15,7 +15,7 @@ function Explore() {
   return (
     <>
       <Header />
-      <section>
+      <section className="explore">
         <Link to="/explore/foods" data-testid="explore-foods">Explore Foods</Link>
         <Link to="/explore/drinks" data-testid="explore-drinks">Explore Drinks</Link>
       </section>
