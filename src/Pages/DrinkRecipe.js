@@ -10,6 +10,7 @@ import { fetchDrinks, fetchFoods } from '../Services';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import MyContext from '../MyContext/MyContext';
+import shareIcon from '../images/shareIcon.svg';
 
 function DrinkRecipe() {
   const { store: { isFavorited,
@@ -99,50 +100,62 @@ function DrinkRecipe() {
           strInstructions,
           strAlcoholic,
         }) => (
-          <div key={ idDrink }>
-            <button
-              data-testid="share-btn"
-              type="button"
-              value={ `http://localhost:3000${pathname}` }
-              // Source: https://stackoverflow.com/questions/39501289/in-reactjs-how-to-copy-text-to-clipboard
-              onClick={ ({ target }) => {
-                navigator.clipboard.writeText(target.value);
-                setShowLinkCopied(true);
-              } }
-            >
-              Compartilhar
-            </button>
-            {showLinkCopied
-            && <p>Link copied!</p>}
-            <input
-              data-testid="favorite-btn"
-              type="image"
-              src={ isFavorited ? blackHeartIcon : whiteHeartIcon }
-              alt="favoriteRecipe"
-              onClick={ handleClick }
-            />
-
-            <h3 data-testid="recipe-category">{strAlcoholic}</h3>
-            <h2 data-testid="recipe-title">{strDrink}</h2>
-            <img data-testid="recipe-photo" src={ strDrinkThumb } alt="oi" />
-            <h2>Ingredientes:</h2>
-            {drinkIngredients.map(({ ingredient, measure }, i) => (
-              <p data-testid={ `${i}-ingredient-name-and-measure` } key={ i }>
-                {`${ingredient} - ${measure}` }
-              </p>
-            ))}
-            <h3>Modo de preparo:</h3>
-            <p data-testid="instructions">{strInstructions}</p>
+          <div className="mainFoodEDrink" key={ idDrink }>
+            <div className="shareHeart">
+              {showLinkCopied
+              && <p>Link copied!</p>}
+              <div>
+                <button
+                  data-testid="share-btn"
+                  type="button"
+                  value={ `http://localhost:3000${pathname}` }
+                  // Source: https://stackoverflow.com/questions/39501289/in-reactjs-how-to-copy-text-to-clipboard
+                  onClick={ ({ target }) => {
+                    navigator.clipboard.writeText(target.value);
+                    setShowLinkCopied(true);
+                  } }
+                >
+                  <img src={ shareIcon } alt={ strDrink } />
+                </button>
+                <input
+                  data-testid="favorite-btn"
+                  type="image"
+                  src={ isFavorited ? blackHeartIcon : whiteHeartIcon }
+                  alt="favoriteRecipe"
+                  onClick={ handleClick }
+                />
+              </div>
+            </div>
+            <div className="nameImage">
+              <h2 data-testid="recipe-title">{strDrink}</h2>
+              <h3 data-testid="recipe-category">{strAlcoholic}</h3>
+              <img data-testid="recipe-photo" src={ strDrinkThumb } alt={ strDrink } />
+            </div>
+            <div className="ingredientes">
+              <h2 className="titleGreen">Ingredientes</h2>
+              {drinkIngredients.map(({ ingredient, measure }, i) => (
+                <p data-testid={ `${i}-ingredient-name-and-measure` } key={ i }>
+                  { ingredient }
+                  <span>{ measure }</span>
+                </p>
+              ))}
+            </div>
+            <div className="preparo">
+              <h2 className="titleGreen">Modo de preparo</h2>
+              <p data-testid="instructions">{strInstructions}</p>
+            </div>
+            <h2 className="titleGreen">Recomendado</h2>
             <Carousel responsive={ responsive }>
               {recipeFoods.map(({ idMeal, strMeal, strMealThumb }, i) => (
-                <div
+                <Link
+                  to={ `/foods/${idMeal}` }
                   key={ i }
+                  className="recomendado"
                   data-testid={ `${i}-recomendation-card` }
                 >
                   <img data-testid="recipe-photo" src={ strMealThumb } alt="oi" />
                   <h2 data-testid={ `${i}-recomendation-title` }>{strMeal}</h2>
-                  <Link to={ `/foods/${idMeal}` }>Detalhes</Link>
-                </div>
+                </Link>
               ))}
             </Carousel>
             <button

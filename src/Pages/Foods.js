@@ -66,7 +66,6 @@ function Foods() {
         ))}
       </div>
       <main className="mainFoodEDrink">
-        <h3>Receitas</h3>
         <section className="all-recipes">
           {data.map((food, index) => (
             <Card

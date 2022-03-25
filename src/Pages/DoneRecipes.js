@@ -27,42 +27,46 @@ function DoneRecipes() {
   return (
     <>
       <Header />
-      <button
-        data-testid="filter-by-all-btn"
-        type="button"
-        onClick={ () => setFilter('') }
-      >
-        All
-      </button>
-      {buttons.map((button) => (
+      <div className="botoes">
         <button
+          data-testid="filter-by-all-btn"
           type="button"
-          value={ button.toLowerCase() }
-          key={ button }
-          onClick={ ({ target }) => setFilter(target.value) }
-          data-testid={ `filter-by-${button.toLowerCase()}-btn` }
+          onClick={ () => setFilter('') }
         >
-          {button}
+          All
         </button>
-      ))}
-      {doneRecipes.filter(({ type }) => type.includes(filter))
-        .map(({ alcoholicOrNot,
-          category, doneDate, id, image, name, nationality, tags, type }, index) => (
-          (<DoneRecipeCard
-            key={ index }
-            index={ index }
-            alcoholicOrNot={ alcoholicOrNot }
-            category={ category }
-            doneDate={ doneDate }
-            id={ id }
-            image={ image }
-            name={ name }
-            nationality={ nationality }
-            tags={ tags }
-            type={ type }
-            showTagAndDoneDate
-          />)
+        {buttons.map((button) => (
+          <button
+            type="button"
+            value={ button.toLowerCase() }
+            key={ button }
+            onClick={ ({ target }) => setFilter(target.value) }
+            data-testid={ `filter-by-${button.toLowerCase()}-btn` }
+          >
+            {button}
+          </button>
         ))}
+      </div>
+      <div className="doneRecipe">
+        {doneRecipes.filter(({ type }) => type.includes(filter))
+          .map(({ alcoholicOrNot,
+            category, doneDate, id, image, name, nationality, tags, type }, index) => (
+            (<DoneRecipeCard
+              key={ index }
+              index={ index }
+              alcoholicOrNot={ alcoholicOrNot }
+              category={ category }
+              doneDate={ doneDate }
+              id={ id }
+              image={ image }
+              name={ name }
+              nationality={ nationality }
+              tags={ tags }
+              type={ type }
+              showTagAndDoneDate
+            />)
+          ))}
+      </div>
     </>
   );
 }

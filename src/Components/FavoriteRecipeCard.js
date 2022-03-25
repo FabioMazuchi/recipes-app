@@ -20,19 +20,48 @@ function FavoriteRecipeCard({ index,
   const [showLinkCopied, setShowLinkCopied] = useState(false);
   const history = useHistory();
   return (
-    <div>
-      <label htmlFor="favorite-btn">
+    <div className="mainFoodEDrink">
+      <div className="shareHeart">
+        {showLinkCopied && <p>Link copied!</p>}
+        <div>
+          <label htmlFor={ index }>
+            <input
+              data-testid={ `${index}-horizontal-share-btn` }
+              value={ `http://localhost:3000/${foodOrDrink}/${id}` }
+              type="image"
+              src={ shareIcon }
+              id={ index }
+              alt="share-icon"
+              onClick={ ({ target }) => {
+                setShowLinkCopied(true);
+                navigator.clipboard.writeText(target.value);
+              } }
+            />
+          </label>
+          <label htmlFor="favorite-btn">
+            <input
+              data-testid={ `${index}-horizontal-favorite-btn` }
+              type="image"
+              src={ blackHeartIcon }
+              alt="botao-favoritado"
+              onClick={ () => handleClick(id, type) }
+            />
+          </label>
+        </div>
+      </div>
+      <Link className="nameImage" to={ `/${foodOrDrink}/${id}` }>
+        <h2
+          data-testid={ `${index}-horizontal-name` }
+        >
+          {name}
+        </h2>
+        <h3
+          data-testid={ `${index}-horizontal-top-text` }
+        >
+          {validate ? (`${nationality} - ${category}`) : alcoholicOrNot}
+        </h3>
         <input
-          data-testid={ `${index}-horizontal-favorite-btn` }
-          type="image"
-          src={ blackHeartIcon }
-          alt="botao-favoritado"
-          onClick={ () => handleClick(id, type) }
-        />
-      </label>
-      <Link to={ `/${foodOrDrink}/${id}` }>
-        <input
-          style={ { width: '300px' } }
+          className="favImage"
           type="image"
           src={ image }
           data-testid={ `${index}-horizontal-image` }
@@ -40,36 +69,11 @@ function FavoriteRecipeCard({ index,
           onClick={ () => history.push(`/${foodOrDrink}/${id}`) }
         />
         <p
-          data-testid={ `${index}-horizontal-top-text` }
+          data-testid={ `${index}-horizontal-done-date` }
         >
-          {validate ? (`${nationality} - ${category}`) : alcoholicOrNot}
-        </p>
-        <p
-          data-testid={ `${index}-horizontal-name` }
-        >
-          {name}
+          {doneDate}
         </p>
       </Link>
-      <p
-        data-testid={ `${index}-horizontal-done-date` }
-      >
-        {doneDate}
-      </p>
-      <label htmlFor={ index }>
-        <input
-          data-testid={ `${index}-horizontal-share-btn` }
-          value={ `http://localhost:3000/${foodOrDrink}/${id}` }
-          type="image"
-          src={ shareIcon }
-          id={ index }
-          alt="share-icon"
-          onClick={ ({ target }) => {
-            setShowLinkCopied(true);
-            navigator.clipboard.writeText(target.value);
-          } }
-        />
-      </label>
-      {showLinkCopied && <p>Link copied!</p>}
     </div>
   );
 }

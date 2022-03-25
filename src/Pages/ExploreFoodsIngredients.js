@@ -29,12 +29,12 @@ function ExploreFoodsIngredients() {
       <section className="exploreIngredient">
         {ingredients.map(({ strIngredient }, i) => (
           <div key={ i } data-testid={ `${i}-ingredient-card` }>
+            <h3 data-testid={ `${i}-card-name` }>{strIngredient}</h3>
             <img
               data-testid={ `${i}-card-img` }
               alt={ strIngredient }
               src={ `https://www.themealdb.com/images/ingredients/${strIngredient}-Small.png` }
             />
-            <p data-testid={ `${i}-card-name` }>{strIngredient}</p>
           </div>
         ))}
       </section>

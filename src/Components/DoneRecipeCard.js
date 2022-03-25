@@ -20,47 +20,49 @@ function DoneRecipeCard({ index,
   const history = useHistory();
 
   return (
-    <div>
-      <Link to={ `/${foodOrDrink}/${id}` }>
+    <div className="mainFoodEDrink">
+      <div className="shareHeart">
+        {showLinkCopied && <p>Link copied!</p>}
+        <label htmlFor={ index }>
+          <input
+            data-testid={ `${index}-horizontal-share-btn` }
+            value={ `http://localhost:3000/${foodOrDrink}/${id}` }
+            type="image"
+            src={ shareIcon }
+            id={ index }
+            alt="share-icon"
+            onClick={ ({ target }) => {
+              setShowLinkCopied(true);
+              navigator.clipboard.writeText(target.value);
+            } }
+          />
+        </label>
+      </div>
+      <Link className="nameImage" to={ `/${foodOrDrink}/${id}` }>
+        <h2
+          data-testid={ `${index}-horizontal-name` }
+        >
+          {name}
+        </h2>
+        <h3
+          data-testid={ `${index}-horizontal-top-text` }
+        >
+          {validate ? (`${nationality} - ${category}`) : alcoholicOrNot}
+        </h3>
         <input
-          style={ { width: '300px' } }
+          className="favImage"
           type="image"
           src={ image }
           data-testid={ `${index}-horizontal-image` }
           alt="foto-da-receita"
           onClick={ () => history.push(`/${foodOrDrink}/${id}`) }
         />
-        <p
-          data-testid={ `${index}-horizontal-top-text` }
-        >
-          {validate ? (`${nationality} - ${category}`) : alcoholicOrNot}
-        </p>
-        <p
-          data-testid={ `${index}-horizontal-name` }
-        >
-          {name}
-        </p>
       </Link>
       <p
         data-testid={ `${index}-horizontal-done-date` }
       >
         {doneDate}
       </p>
-      <label htmlFor={ index }>
-        <input
-          data-testid={ `${index}-horizontal-share-btn` }
-          value={ `http://localhost:3000/${foodOrDrink}/${id}` }
-          type="image"
-          src={ shareIcon }
-          id={ index }
-          alt="share-icon"
-          onClick={ ({ target }) => {
-            setShowLinkCopied(true);
-            navigator.clipboard.writeText(target.value);
-          } }
-        />
-      </label>
-      {showLinkCopied && <p>Link copied!</p>}
       { tags.map((tag) => (
         <span
           key={ index }

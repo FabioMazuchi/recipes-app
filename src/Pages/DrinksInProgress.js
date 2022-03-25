@@ -12,6 +12,7 @@ import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import MyContext from '../MyContext/MyContext';
 import Checkbox from '../Components/Checkbox';
+import shareIcon from '../images/shareIcon.svg';
 
 function DrinksInProgress() {
   const { store: { isFavorited,
@@ -71,59 +72,70 @@ function DrinksInProgress() {
           strDrinkThumb,
           strInstructions,
         }) => (
-          <div key={ idDrink }>
+          <div className="mainFoodEDrink" key={ idDrink }>
+            <div className="shareHeart">
+              {showLinkCopied
+              && <p>Link copied!</p>}
+              <div>
+                <button
+                  data-testid="share-btn"
+                  type="button"
+                  value={ `http://localhost:3000/drinks/${id}` }
+                  // Source: https://stackoverflow.com/questions/39501289/in-reactjs-how-to-copy-text-to-clipboard
+                  onClick={ ({ target }) => {
+                    navigator.clipboard.writeText(target.value);
+                    setShowLinkCopied(true);
+                  } }
+                >
+                  <img src={ shareIcon } alt={ strDrink } />
+                </button>
+                <input
+                  data-testid="favorite-btn"
+                  type="image"
+                  src={ isFavorited ? blackHeartIcon : whiteHeartIcon }
+                  alt="favoriteRecipe"
+                  onClick={ () => handleClick() }
+                />
+              </div>
+            </div>
+            <div className="nameImage">
+              <h2 data-testid="recipe-title">{strDrink}</h2>
+              <h3 data-testid="recipe-category">{strCategory}</h3>
+              <img data-testid="recipe-photo" src={ strDrinkThumb } alt={ strDrink } />
+            </div>
+            <div className="ingredientesInProgress">
+              <h2 className="titleGreen">Ingredientes</h2>
+              {drinkIngredients.map(({ ingredient, measure }, i) => (
+                <Checkbox
+                  key={ i }
+                  ingredient={ ingredient }
+                  measure={ measure }
+                  handleChange={ handleChange }
+                  type="cocktails"
+                  i={ i }
+                  id={ id }
+                />
+              ))}
+            </div>
+            <div className="preparo">
+              <h2 className="titleGreen">Modo de preparo</h2>
+              <p data-testid="instructions">{strInstructions}</p>
+            </div>
             <button
-              data-testid="share-btn"
+              className="startRecipe"
+              data-testid="finish-recipe-btn"
               type="button"
-              value={ `http://localhost:3000/drinks/${id}` }
-              // Source: https://stackoverflow.com/questions/39501289/in-reactjs-how-to-copy-text-to-clipboard
-              onClick={ ({ target }) => {
-                navigator.clipboard.writeText(target.value);
-                setShowLinkCopied(true);
+              disabled={ isDisabled }
+              onClick={ () => {
+                saveDoneRecipe(drinkRecipe);
+                history.push('/done-recipes');
               } }
             >
-              Compartilhar
+              Finalizar Receita
             </button>
-            {showLinkCopied
-            && <p>Link copied!</p>}
-            <input
-              data-testid="favorite-btn"
-              type="image"
-              src={ isFavorited ? blackHeartIcon : whiteHeartIcon }
-              alt="favoriteRecipe"
-              onClick={ () => handleClick() }
-            />
-            <h3 data-testid="recipe-category">{strCategory}</h3>
-            <h2 data-testid="recipe-title">{strDrink}</h2>
-            <img data-testid="recipe-photo" src={ strDrinkThumb } alt="oi" />
-            <h2>Ingredientes:</h2>
-            {drinkIngredients.map(({ ingredient, measure }, i) => (
-              <Checkbox
-                key={ i }
-                ingredient={ ingredient }
-                measure={ measure }
-                handleChange={ handleChange }
-                type="cocktails"
-                i={ i }
-                id={ id }
-              />
-            ))}
-            <h3>Modo de preparo:</h3>
-            <p data-testid="instructions">{strInstructions}</p>
           </div>
         ),
       )}
-      <button
-        data-testid="finish-recipe-btn"
-        type="button"
-        disabled={ isDisabled }
-        onClick={ () => {
-          saveDoneRecipe(drinkRecipe);
-          history.push('/done-recipes');
-        } }
-      >
-        Finalizar Receita
-      </button>
     </>
   );
 }

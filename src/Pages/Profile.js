@@ -28,36 +28,33 @@ function Profile() {
   return (
     <>
       <Header />
-
-      <h2 data-testid="profile-email">{ email }</h2>
-
-      <button
-        data-testid="profile-done-btn"
-        type="button"
-        onClick={ () => history.push('/done-recipes') }
-      >
-        Done Recipes
-      </button>
-
-      <button
-        data-testid="profile-favorite-btn"
-        type="button"
-        onClick={ () => history.push('/favorite-recipes') }
-      >
-        Favorite Recipes
-      </button>
-
-      <button
-        data-testid="profile-logout-btn"
-        type="button"
-        onClick={ () => {
-          localStorage.clear();
-          history.push('/');
-        } }
-      >
-        Logout
-      </button>
-
+      <section className="explore">
+        <h2 data-testid="profile-email">{ email }</h2>
+        <button
+          data-testid="profile-done-btn"
+          type="button"
+          onClick={ () => history.push('/done-recipes') }
+        >
+          Done Recipes
+        </button>
+        <button
+          data-testid="profile-favorite-btn"
+          type="button"
+          onClick={ () => history.push('/favorite-recipes') }
+        >
+          Favorite Recipes
+        </button>
+        <button
+          data-testid="profile-logout-btn"
+          type="button"
+          onClick={ () => {
+            localStorage.clear();
+            history.push('/');
+          } }
+        >
+          Logout
+        </button>
+      </section>
       <Footer />
     </>
   );

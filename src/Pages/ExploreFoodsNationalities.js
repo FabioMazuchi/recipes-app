@@ -54,7 +54,6 @@ function ExploreFoodsNationalities() {
         <>
           <form className="nacionalidade">
             <label htmlFor="nacionalidade">
-              Filtrar por nacionalidade:
               <select
                 onChange={ ({ target }) => handlePais(target.value) }
                 data-testid="explore-by-nationality-dropdown"

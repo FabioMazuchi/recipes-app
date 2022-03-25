@@ -4,6 +4,7 @@ import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 import { fetchFoods, fetchDrinks } from '../Services';
 import MyContext from '../MyContext/MyContext';
+import logo from '../images/logo.png';
 
 function Header() {
   const history = useHistory();
@@ -83,14 +84,30 @@ function Header() {
 
   return (
     <header>
-      <button
-        type="button"
-        onClick={ () => history.push('/profile') }
-        src={ profileIcon }
-        data-testid="profile-top-btn"
-      >
-        <img src={ profileIcon } alt="profile-icon-svg" />
-      </button>
+      <div className="logo">
+        <img className="logotipo" alt="Rango" src={ logo } />
+        <div className="logoButton">
+          <button
+            type="button"
+            onClick={ () => history.push('/profile') }
+            src={ profileIcon }
+            data-testid="profile-top-btn"
+          >
+            <img src={ profileIcon } alt="profile-icon-svg" />
+          </button>
+          { showSearchIcon
+            && (
+              <button
+                type="button"
+                onClick={ () => setShowSearchBar(!showSearchBar) }
+                src={ searchIcon }
+                data-testid="search-top-btn"
+              >
+                <img src={ searchIcon } alt="search-icon-svg" />
+              </button>
+            )}
+        </div>
+      </div>
       <button
         className="pageTitle"
         type="button"
@@ -98,19 +115,6 @@ function Header() {
       >
         {pageTitle}
       </button>
-      {
-        showSearchIcon
-        && (
-          <button
-            type="button"
-            onClick={ () => setShowSearchBar(!showSearchBar) }
-            src={ searchIcon }
-            data-testid="search-top-btn"
-          >
-            <img src={ searchIcon } alt="search-icon-svg" />
-          </button>
-        )
-      }
       {showSearchBar && searchForm }
     </header>
   );

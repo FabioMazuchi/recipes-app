@@ -25,16 +25,18 @@ function ExploreDrinksIngredients() {
   return (
     <>
       <Header />
-      {ingredientes.map((({ strIngredient1 }, i) => (
-        <div key={ i } data-testid={ `${i}-ingredient-card` }>
-          <img
-            data-testid={ `${i}-card-img` }
-            alt={ strIngredient1 }
-            src={ `https://www.thecocktaildb.com/images/ingredients/${strIngredient1}-Small.png` }
-          />
-          <p data-testid={ `${i}-card-name` }>{strIngredient1}</p>
-        </div>
-      )))}
+      <section className="exploreIngredient">
+        {ingredientes.map((({ strIngredient1 }, i) => (
+          <div key={ i } data-testid={ `${i}-ingredient-card` }>
+            <h3 data-testid={ `${i}-card-name` }>{strIngredient1}</h3>
+            <img
+              data-testid={ `${i}-card-img` }
+              alt={ strIngredient1 }
+              src={ `https://www.thecocktaildb.com/images/ingredients/${strIngredient1}-Small.png` }
+            />
+          </div>
+        )))}
+      </section>
       <Footer />
     </>
   );
