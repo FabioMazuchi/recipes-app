@@ -111,6 +111,10 @@ form.searchForm input[type=text] {
   width: 100%;
 }
 
+.radio label {
+  background-color: #5A9837;
+}
+
 .radio input {
   margin-right: 4px;
 }
@@ -401,6 +405,13 @@ main.nationalities {
   flex-direction: column;
 }
 
+.recomendado h3 {
+  color: #5A9837;
+  font-style: italic;
+  margin-bottom: 8px;
+  font-size:30px;
+}
+
 footer {
   position: fixed;
   bottom: 0;
@@ -440,5 +451,13 @@ img.logotipo {
   }
   img.logotipo {
     width: 150px;
+  }
+  .ingredientes, .preparo, iframe, .recomendado, .ingredientesInProgress {
+    width: 70%;
+    margin: 20px auto;
+    font-size: 20px;
+  }
+  .preparo p {
+    line-height: 30px;
   }
 }

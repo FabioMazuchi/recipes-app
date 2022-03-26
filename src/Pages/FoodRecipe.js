@@ -152,20 +152,22 @@ function FoodRecipe() {
               frameBorder="0"
               allowFullScreen
             />
-            <h2 className="titleGreen">Recomendado</h2>
-            <Carousel responsive={ responsive }>
-              {recipeDrinks.map(({ idDrink, strDrink, strDrinkThumb }, i) => (
-                <Link
-                  to={ `/drinks/${idDrink}` }
-                  className="recomendado"
-                  key={ i }
-                  data-testid={ `${i}-recomendation-card` }
-                >
-                  <img data-testid="recipe-photo" src={ strDrinkThumb } alt="oi" />
-                  <h2 data-testid={ `${i}-recomendation-title` }>{strDrink}</h2>
-                </Link>
-              ))}
-            </Carousel>
+            <div className="recomendado">
+              <h3>Recomendado</h3>
+              <Carousel responsive={ responsive }>
+                {recipeDrinks.map(({ idDrink, strDrink, strDrinkThumb }, i) => (
+                  <Link
+                    to={ `/drinks/${idDrink}` }
+                    className="recomendado"
+                    key={ i }
+                    data-testid={ `${i}-recomendation-card` }
+                  >
+                    <img data-testid="recipe-photo" src={ strDrinkThumb } alt="oi" />
+                    <h2 data-testid={ `${i}-recomendation-title` }>{strDrink}</h2>
+                  </Link>
+                ))}
+              </Carousel>
+            </div>
             <button
               onClick={ () => {
                 setInitRecipe(true);

@@ -144,20 +144,22 @@ function DrinkRecipe() {
               <h2 className="titleGreen">Modo de preparo</h2>
               <p data-testid="instructions">{strInstructions}</p>
             </div>
-            <h2 className="titleGreen">Recomendado</h2>
-            <Carousel responsive={ responsive }>
-              {recipeFoods.map(({ idMeal, strMeal, strMealThumb }, i) => (
-                <Link
-                  to={ `/foods/${idMeal}` }
-                  key={ i }
-                  className="recomendado"
-                  data-testid={ `${i}-recomendation-card` }
-                >
-                  <img data-testid="recipe-photo" src={ strMealThumb } alt="oi" />
-                  <h2 data-testid={ `${i}-recomendation-title` }>{strMeal}</h2>
-                </Link>
-              ))}
-            </Carousel>
+            <div className="recomendado">
+              <h3>Recomendado</h3>
+              <Carousel responsive={ responsive }>
+                {recipeFoods.map(({ idMeal, strMeal, strMealThumb }, i) => (
+                  <Link
+                    to={ `/foods/${idMeal}` }
+                    key={ i }
+                    className="recomendado"
+                    data-testid={ `${i}-recomendation-card` }
+                  >
+                    <img data-testid="recipe-photo" src={ strMealThumb } alt="oi" />
+                    <h2 data-testid={ `${i}-recomendation-title` }>{strMeal}</h2>
+                  </Link>
+                ))}
+              </Carousel>
+            </div>
             <button
               onClick={ () => iniciarReceita(idDrink) }
               className="startRecipe"
