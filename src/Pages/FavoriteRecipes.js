@@ -32,11 +32,7 @@ function FavoriteRecipes() {
     setPageTitle('Favorite Recipes');
     setShowSearchIcon(false);
     getFavoriteRecipes();
-  }, []);
-
-  // useEffect(() => {
-  //   getFavoriteRecipes();
-  // }, []);
+  }, [setPageTitle, setShowSearchIcon]);
 
   return (
     <>

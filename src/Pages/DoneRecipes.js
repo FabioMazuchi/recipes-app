@@ -12,7 +12,7 @@ function DoneRecipes() {
   useEffect(() => {
     setPageTitle('Done Recipes');
     setShowSearchIcon(false);
-  }, []);
+  }, [setPageTitle, setShowSearchIcon]);
 
   useEffect(() => {
     const getDoneRecipesEffect = () => {

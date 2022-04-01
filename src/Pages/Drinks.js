@@ -14,10 +14,13 @@ function Drinks() {
   const [drinkCategories, setDrinkCategories] = useState([]);
   const FIVE = 5;
 
-  const fetchInitDrinks = async () => {
-    const result = await (await fetchDrinks('search.php?s='));
-    setData(result.slice(0, MAX_LENGTH));
-  };
+  useEffect(() => {
+    const fetchInitDrinks = async () => {
+      const result = await (await fetchDrinks('search.php?s='));
+      setData(result.slice(0, MAX_LENGTH));
+    };
+    fetchInitDrinks();
+  }, [setData]);
 
   const fetchDrinksCategories = async () => {
     const resultCategories = await fetchDrinks('list.php?c=list');
@@ -42,9 +45,8 @@ function Drinks() {
   useEffect(() => {
     setShowSearchIcon(true);
     setPageTitle('Drinks');
-    fetchInitDrinks();
     fetchDrinksCategories();
-  }, []);
+  }, [setPageTitle, setShowSearchIcon]);
 
   return (
     <>

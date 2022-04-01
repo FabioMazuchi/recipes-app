@@ -58,19 +58,21 @@ function DoneRecipeCard({ index,
           onClick={ () => history.push(`/${foodOrDrink}/${id}`) }
         />
       </Link>
-      <p
-        data-testid={ `${index}-horizontal-done-date` }
-      >
-        {doneDate}
-      </p>
-      { tags.map((tag) => (
-        <span
-          key={ index }
-          data-testid={ `${index}-${tag}-horizontal-tag` }
+      <div className="date">
+        <p
+          data-testid={ `${index}-horizontal-done-date` }
         >
-          {tag}
-        </span>
-      ))}
+          {doneDate}
+        </p>
+        { tags.map((tag) => (
+          <span
+            key={ index }
+            data-testid={ `${index}-${tag}-horizontal-tag` }
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }

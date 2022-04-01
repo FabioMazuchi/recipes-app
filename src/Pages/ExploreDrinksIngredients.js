@@ -16,7 +16,7 @@ function ExploreDrinksIngredients() {
   useEffect(() => {
     setPageTitle('Explore Ingredients');
     setShowSearchIcon(false);
-  }, []);
+  }, [setPageTitle, setShowSearchIcon]);
 
   useEffect(() => {
     requestIngredients();

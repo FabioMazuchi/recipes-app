@@ -58,7 +58,7 @@ function FoodRecipe() {
       setFoodRecipe(await fetchFoods(`lookup.php?i=${id}`));
     };
     setRecipeEffect();
-  }, []);
+  }, [id, setFoodRecipe]);
 
   useEffect(() => {
     const setIngredientsEffect = async () => {
@@ -68,7 +68,7 @@ function FoodRecipe() {
       }
     };
     setIngredientsEffect();
-  }, [foodRecipe]);
+  }, [foodRecipe, setFoodIngredients]);
 
   useEffect(() => {
     const setRecipeDrinksEffect = async () => {
@@ -84,7 +84,7 @@ function FoodRecipe() {
       setIsFavorited(check);
     };
     setIsFavoritedEffect();
-  }, []);
+  }, [id, setIsFavorited]);
 
   return (
     <>

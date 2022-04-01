@@ -14,10 +14,13 @@ function Foods() {
   const [categoryList, setCategoryList] = useState([]);
   const FIVE = 5;
 
-  const fetchInitFoods = async () => {
-    const result = await (await fetchFoods('search.php?s='));
-    setData(result.slice(0, MAX_LENGTH));
-  };
+  useEffect(() => {
+    const fetchInitFoods = async () => {
+      const result = await fetchFoods('search.php?s=');
+      setData(result.slice(0, MAX_LENGTH));
+    };
+    fetchInitFoods();
+  }, [setData]);
 
   const getCategories = async () => {
     const result = await fetchFoods('list.php?c=list');
@@ -42,9 +45,8 @@ function Foods() {
   useEffect(() => {
     setShowSearchIcon(true);
     setPageTitle('Foods');
-    fetchInitFoods();
     getCategories();
-  }, []);
+  }, [setPageTitle, setShowSearchIcon]);
 
   return (
     <>

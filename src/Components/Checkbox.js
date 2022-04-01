@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { saveFoodProgress, saveDrinkProgress } from '../Helpers';
 
 function Checkbox({ i, ingredient, measure, handleChange, id, type }) {
+  console.log(measure);
   const validateStorage = () => {
     let res = JSON.parse(localStorage.getItem('inProgressRecipes'));
     if (res === null || res[type][id] === undefined) {
@@ -34,7 +35,11 @@ function Checkbox({ i, ingredient, measure, handleChange, id, type }) {
         checked={ isChecked }
       />
       { ingredient }
-      <span className={ isChecked ? 'concluidRecipe' : '' }>{ measure }</span>
+      <span
+        className={ isChecked ? 'concluidRecipe' : '' }
+      >
+        { measure === undefined ? 'to taste' : measure }
+      </span>
     </label>
   );
 }

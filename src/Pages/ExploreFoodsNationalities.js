@@ -14,11 +14,6 @@ function ExploreFoodsNationalities() {
   const history = useHistory();
   const MAX_LENGTH = 12;
 
-  const fetchInitFoods = async () => {
-    const result = await fetchFoods('search.php?s=');
-    setData(result.slice(0, MAX_LENGTH));
-  };
-
   const handlePais = async (target) => {
     if (target === 'All') {
       fetchInitFoods();
@@ -37,15 +32,19 @@ function ExploreFoodsNationalities() {
   useEffect(() => {
     setPageTitle('Explore Nationalities');
     setShowSearchIcon(true);
-  }, []);
+  }, [setPageTitle, setShowSearchIcon]);
 
   useEffect(() => {
     fetchNacionalidade();
   }, []);
 
   useEffect(() => {
+    const fetchInitFoods = async () => {
+      const result = await fetchFoods('search.php?s=');
+      setData(result.slice(0, MAX_LENGTH));
+    };
     fetchInitFoods();
-  }, []);
+  }, [setData]);
 
   return (
     <>

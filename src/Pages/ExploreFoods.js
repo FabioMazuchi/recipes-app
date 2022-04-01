@@ -20,7 +20,7 @@ function ExploreFoods() {
   useEffect(() => {
     setPageTitle('Explore Foods');
     setShowSearchIcon(false);
-  }, []);
+  }, [setPageTitle, setShowSearchIcon]);
 
   return (
     <>

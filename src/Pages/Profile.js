@@ -19,7 +19,7 @@ function Profile() {
   useEffect(() => {
     setPageTitle('Profile');
     setShowSearchIcon(false);
-  }, []);
+  }, [setPageTitle, setShowSearchIcon]);
 
   useEffect(() => {
     getEmail();

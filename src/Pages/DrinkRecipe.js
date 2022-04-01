@@ -63,7 +63,7 @@ function DrinkRecipe() {
       setDrinkRecipe(await fetchDrinks(`lookup.php?i=${id}`));
     };
     setRecipeEffect();
-  }, []);
+  }, [id, setDrinkRecipe]);
 
   useEffect(() => {
     const setIngredientsEffect = async () => {
@@ -72,7 +72,7 @@ function DrinkRecipe() {
       }
     };
     setIngredientsEffect();
-  }, [drinkRecipe]);
+  }, [drinkRecipe, setDrinkIngredients]);
 
   useEffect(() => {
     const setRecipeFoodsEffect = async () => {
@@ -88,7 +88,7 @@ function DrinkRecipe() {
       setIsFavorited(check);
     };
     setIsFavoritedEffect();
-  }, []);
+  }, [id, setIsFavorited]);
 
   return (
     <>

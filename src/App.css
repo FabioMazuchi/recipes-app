@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Libre Baskerville', serif;
 }
 
 body,
@@ -26,7 +27,7 @@ form.login {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -60%);
   background-color: rgba(174, 191, 191, 0.7);
   border-radius: 10px;
 }
@@ -182,6 +183,7 @@ form.searchForm button {
 }
 
 .nameImage h3 {
+  margin-top: 5px;
   font-style: italic;
   color: #aa713c;
 }
@@ -197,12 +199,6 @@ form.searchForm button {
 
 .doneRecipe {
   min-height: 500px;
-}
-
-.doneRecipe p {
-  margin-top: 8px;
-  color: #aa713c;
-  text-align: center;
 }
 
 .favImage {
@@ -227,6 +223,7 @@ form.searchForm button {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  margin-top: 15px;
 }
 
 .ingredientesInProgress label {
@@ -417,6 +414,7 @@ footer {
   bottom: 0;
   background-color: rgba(239, 194, 91, 0.7);
   display: flex;
+  align-items: center;
   justify-content: space-evenly;
   padding: 8px 0;
   width: 100%;
@@ -424,6 +422,13 @@ footer {
 
 img.logotipo {
   width: 100px;
+}
+
+.date {
+  margin-top: 5px;
+  display: flex;
+  justify-content: space-evenly;
+  color: #aa713c;
 }
 
 @media screen and (min-width: 700px) {

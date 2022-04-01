@@ -10,7 +10,7 @@ function Explore() {
   useEffect(() => {
     setPageTitle('Explore');
     setShowSearchIcon(false);
-  }, []);
+  }, [setPageTitle, setShowSearchIcon]);
 
   return (
     <>

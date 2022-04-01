@@ -57,7 +57,7 @@ function FoodsInProgress() {
       }
     };
     setFoodAndIngredientsEffect();
-  }, []);
+  }, [foodRecipe.length, id, setFoodIngredients, setFoodRecipe]);
 
   useEffect(() => {
     const setIsFavoritedEffect = () => {
@@ -65,7 +65,7 @@ function FoodsInProgress() {
       setIsFavorited(check);
     };
     setIsFavoritedEffect();
-  }, []);
+  }, [id, setIsFavorited]);
 
   return (
     <>

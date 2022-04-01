@@ -18,7 +18,7 @@ function ExploreDrinks() {
   useEffect(() => {
     setPageTitle('Explore Drinks');
     setShowSearchIcon(false);
-  }, []);
+  }, [setPageTitle, setShowSearchIcon]);
 
   return (
     <>

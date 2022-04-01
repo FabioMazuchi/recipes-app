@@ -13,7 +13,7 @@ function ExploreFoodsIngredients() {
   useEffect(() => {
     setPageTitle('Explore Ingredients');
     setShowSearchIcon(false);
-  }, []);
+  }, [setPageTitle, setShowSearchIcon]);
 
   useEffect(() => {
     const setIngredientsEffect = async () => {

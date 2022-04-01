@@ -17,14 +17,14 @@ function CheckboxDrinks({ i,
         [id]: [...drinkStepArray] });
     };
     setDrinksObjectEffect();
-  }, [drinkStepArray]);
+  }, [cocktails, drinkStepArray, id, setCocktails]);
 
   useEffect(() => {
     const setDrinkStepArrayEffect = () => (isChecked
       ? setDrinkStepArray([...drinkStepArray, ingredient])
       : setDrinkStepArray(drinkStepArray.filter((f) => f !== ingredient)));
     setDrinkStepArrayEffect();
-  }, [isChecked]);
+  }, [drinkStepArray, ingredient, isChecked, setDrinkStepArray]);
 
   return (
     <label
